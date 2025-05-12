@@ -1,5 +1,5 @@
 export const signup = async (dispatch, payload) => {
-  let response = await fetch( + "/signup", {
+  let response = await fetch(import.meta.env.VITE_BACKEND_URL + "/signup", {
     method: "POST",
     headers: { "Content-type": "application/json" },
     body: JSON.stringify({
@@ -10,10 +10,8 @@ export const signup = async (dispatch, payload) => {
   let data = await response.json();
 };
 
-
-
 export const login = async (dispatch, payload) => {
-  let response = await fetch( + "/login", {
+  let response = await fetch(import.meta.env.VITE_BACKEND_URL +"/login", {
     method: "POST",
     headers: { "Content-type": "application/json" },
     body: JSON.stringify({
@@ -29,20 +27,15 @@ export const login = async (dispatch, payload) => {
   });
 };
 
-
-
 export const getUser = async (dispatch, payload) => {
-  let response = await fetch( + "/private", {
+  let response = await fetch(import.meta.env.VITE_BACKEND_URL +"/private", {
     method: "Get",
-    headers: { "Authorization": "Bearer" + ppayload },
-  }
-  );
+    headers: { Authorization: "Bearer" + payload },
+  });
   let data = await response.json();
 
   dispatch({
     type: "set_user",
     payload: { user: data.user, access_token: payload },
   });
-}
-
-
+};
