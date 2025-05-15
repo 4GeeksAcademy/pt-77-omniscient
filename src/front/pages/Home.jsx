@@ -2,10 +2,10 @@ import React, { useEffect } from "react"
 import useGlobalReducer from "../hooks/useGlobalReducer.jsx"
 import projectimage1 from "../assets/img/projectimage1.png";
 
+
 export const Home = () => {
 
 	const { store, dispatch } = useGlobalReducer()
-
 
 
 	return (
