@@ -4,7 +4,7 @@ export const getVintageGames = async (dispatch, payload) => {
     headers: {
       "Content-Type": "application/json",
     },
-    // body: JSON.stringify(payload),
+    body: JSON.stringify(payload),
   });
 
   let data = await response.json();
