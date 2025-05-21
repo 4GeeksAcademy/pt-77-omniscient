@@ -18,11 +18,11 @@ export const Home = () => {
 				height: "100vh", // full screen height
 				width: "100vw",  // full screen width
 			}}>
-				<h1 className="text-white mx-auto text-center ">Welcome to Omniscient</h1>
+				<h1 className="text-white mx-auto text-center p-5">Welcome to Omniscient</h1>
 			<div>
-				<div class="button group">
+				<div class="button group  mx-auto text-center d-flex justify-content-center gap-5">
 				<div class="btn btn-danger">Enter as Guest</div>
-				<div class="btn btn-danger">Log in/Sign up</div>
+				<div class="btn btn-danger ">Log in/Sign up</div>
 			</div>
 			</div>
 		</div>
