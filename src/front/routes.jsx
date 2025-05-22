@@ -9,7 +9,6 @@ import { Layout } from "./pages/Layout";
 import { Home } from "./pages/Home";
 import { Single } from "./pages/Single";
 import { Demo } from "./pages/Demo";
-
 import { Games } from "./pages/Games";
 import { RetroGames } from "./pages/Retrogames";
 import { Merch } from "./pages/Merch";

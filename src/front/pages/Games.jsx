@@ -3,9 +3,9 @@ import useGlobalReducer from "../hooks/useGlobalReducer.jsx";
 import { GameCard } from "../components/GameCard.jsx";
 
 
-export const RawgGames = () => {
+export const Games = () => {
   const { store, dispatch, getRawgGames } = useGlobalReducer()
-  const [rawgGames, setRawgGames] = useState([])
+  const [Games, setGames] = useState([])
 
 
   useEffect(() => {
@@ -15,14 +15,14 @@ export const RawgGames = () => {
   }, [])
 
   useEffect(() => {
-    setRawgGames(store.rawgGames)
+    setGames(store.rawgGames)
     // console.log(store.rawgGames)
   }, [store.RawgGames])
 
   return (
     <div className="text-center mt-5">
 
-      {rawgGames?.map((rawgGames, index) => {
+      {Games?.map((rawgGames, index) => {
         return <GameCard key={rawgGames.uid} type={"rawgGames"} name={rawgGames.name} uid={rawgGames.id} img={rawgGames.cover.url} />
       })}
 

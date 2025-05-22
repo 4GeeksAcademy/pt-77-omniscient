@@ -19,24 +19,6 @@ CORS(api)
 CLIENT_ID = "2r3wcled8ugszufen3r4r2makgitqq"
 ACCESS_TOKEN = "x3du3wpyr1fvn0jmmrtyzsq6sek9w0"
 
-@api.route('/games', methods=['GET'])
-def get_rawg_games():
-    # payload = request.get_json()
-
-    headers = {
-        "Client-ID": CLIENT_ID,
-        "Authorization": f"Bearer {ACCESS_TOKEN}",
-        "Content-Type": "application/json"
-    }
-    response = requests.post(
-        "https://api.igdb.com/v4/games",
-        headers=headers,
-        data="fields name,cover.url,genres.name,first_release_date; limit 10;"
-    )
-
-    return jsonify(response.json())
-
-
 
 @api.route('/retrogames', methods=['POST'])
 def get_vintage_games():
@@ -95,3 +77,33 @@ def get_user():
     user = User.query.filter_by(email=user_email).first()
 
     return jsonify(user=user.serialize()), 200
+
+
+@api.route('/games', methods=['GET'])
+def get_rawg_games():
+
+    search = request.args.get('search', '')
+    page = request.args.get('page', 1)
+    page_size = request.args.get('page_size', 10)
+
+    params = {
+        'key': e09cf7c5817241ee825687b3373f921f,
+        'search': search,
+        'page': page,
+        'page_size': page_size
+    }
+
+    try:
+        response = requests.get('https://api.rawg.io/api/games', params=params, headers={
+            'Accept': 'application/json',
+            'User-Agent': 'MyGameApp/1.0'
+        })
+
+        if response.status_code != 200:
+            return jsonify({'error': 'Failed to fetch games from RAWG'}), response.status_code
+
+        return jsonify(response.json()), 200
+
+    except Exception as e:
+        print("RAWG fetch error:", e)
+        return jsonify({'error': 'Server error'}), 500
