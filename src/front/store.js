@@ -5,6 +5,7 @@ export const initialStore = () => {
 
     access_token: sessionStorage.getItem("access_token"),
     vintageGames: [],
+    rawgGames: [],
   };
 };
 
@@ -21,6 +22,12 @@ export default function storeReducer(store, action = {}) {
       };
 
     case "add_vintageGames":
+      return {
+        ...store,
+        vintageGames: action.payload,
+      };
+    
+      case "add_rawgGames":
       return {
         ...store,
         vintageGames: action.payload,

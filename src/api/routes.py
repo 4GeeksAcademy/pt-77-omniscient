@@ -19,6 +19,24 @@ CORS(api)
 CLIENT_ID = "2r3wcled8ugszufen3r4r2makgitqq"
 ACCESS_TOKEN = "x3du3wpyr1fvn0jmmrtyzsq6sek9w0"
 
+@api.route('/games', methods=['GET'])
+def get_rawg_games():
+    # payload = request.get_json()
+
+    headers = {
+        "Client-ID": CLIENT_ID,
+        "Authorization": f"Bearer {ACCESS_TOKEN}",
+        "Content-Type": "application/json"
+    }
+    response = requests.post(
+        "https://api.igdb.com/v4/games",
+        headers=headers,
+        data="fields name,cover.url,genres.name,first_release_date; limit 10;"
+    )
+
+    return jsonify(response.json())
+
+
 
 @api.route('/retrogames', methods=['POST'])
 def get_vintage_games():

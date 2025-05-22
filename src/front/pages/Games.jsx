@@ -3,17 +3,29 @@ import useGlobalReducer from "../hooks/useGlobalReducer.jsx";
 import { GameCard } from "../components/GameCard.jsx";
 
 
-export const Games = () => {
+export const RawgGames = () => {
+  const { store, dispatch, getRawgGames } = useGlobalReducer()
+  const [rawgGames, setRawgGames] = useState([])
 
-const { store, dispatch } = useGlobalReducer()
+
+  useEffect(() => {
+    if (store.rawgGames.length == 0) {
+      getRawgGames()
+    }
+  }, [])
+
+  useEffect(() => {
+    setRawgGames(store.rawgGames)
+    // console.log(store.rawgGames)
+  }, [store.RawgGames])
 
   return (
     <div className="text-center mt-5">
-   
-   <h1>Games Page</h1>
-   <GameCard/>
-   
+
+      {rawgGames?.map((rawgGames, index) => {
+        return <GameCard key={rawgGames.uid} type={"rawgGames"} name={rawgGames.name} uid={rawgGames.id} img={rawgGames.cover.url} />
+      })}
 
     </div>
   );
-};
+}; 
