@@ -87,7 +87,7 @@ def get_rawg_games():
     page_size = request.args.get('page_size', 10)
 
     params = {
-        'key': e09cf7c5817241ee825687b3373f921f,
+        'key': "e09cf7c5817241ee825687b3373f921f",
         'search': search,
         'page': page,
         'page_size': page_size

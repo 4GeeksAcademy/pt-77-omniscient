@@ -27,10 +27,10 @@ export default function storeReducer(store, action = {}) {
         vintageGames: action.payload,
       };
     
-      case "add_rawgGames":
+      case "add_RawgGames":
       return {
         ...store,
-        vintageGames: action.payload,
+        rawgGames: action.payload,
       };
 
     default:
