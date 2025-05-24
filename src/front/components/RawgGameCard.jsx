@@ -9,14 +9,15 @@ export const RawgGameCard = (props) => {
   return (
     <div className="card text-bg-primary mb-3" style={{ minWidth: "18rem" }}>
       <div className="card-body">
-        <img src={`https:${props.img}`}
+        <img src={props.img}
           className="card-img-top"
           alt="gameImage"
-          style={{ height: "300px", objectFit: "cover" }}
+          style={{ height: "300px", objectFit: "contain" }}
         />
         <h2 className="card-title">{props.name}</h2>
         <h3 className="released">{props.released}</h3>
         <h4 className="rating">{props.rating}</h4>
+        <p className="bio">{props.description}</p>
         </div>
     </div>
   );

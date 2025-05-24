@@ -36,10 +36,11 @@ export const Games = () => {
       {games.map((rawgGame) => (
         <RawgGameCard
           key={rawgGame.id}
-          img={rawgGame.cover?.url || rawgGame.background_image}
+          img={rawgGame.background_image}
           name={rawgGame.name}
           released={rawgGame.released}
           rating={rawgGame.rating}
+          description={rawgGame.description}
         />
       ))}
     </div>
