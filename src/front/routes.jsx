@@ -9,13 +9,12 @@ import { Layout } from "./pages/Layout";
 import { Home } from "./pages/Home";
 import { Single } from "./pages/Single";
 import { Demo } from "./pages/Demo";
-
 import { Games } from "./pages/Games";
 import { RetroGames } from "./pages/Retrogames";
 import { Merch } from "./pages/Merch";
 import { Checkout } from "./pages/Checkout";
-import { Login } from "./pages/login";
-import { Signup } from "./pages/signup";
+import { Login } from "./pages/Login";
+import { Signup } from "./pages/Signup";
 import { Private } from "./pages/private";
 
 export const router = createBrowserRouter(

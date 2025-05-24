@@ -39,3 +39,38 @@ export const getUser = async (dispatch, payload) => {
     payload: { user: data.user, access_token: payload },
   });
 };
+
+export const getVintageGames = async (dispatch, payload) => {
+  let response = await fetch(import.meta.env.VITE_BACKEND_URL+"/retrogames", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(payload),
+  });
+
+  let data = await response.json();
+
+  dispatch({
+    type: "add_vintageGames",
+    payload: data,
+  });
+};
+
+export const getRawgGames = async (dispatch, payload) => {
+  let response = await fetch("https://api.rawg.io/api/games?key=e09cf7c5817241ee825687b3373f921f", {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(payload),
+  });
+
+  let data = await response.json();
+
+  dispatch({
+    type: "add_RawgGames",
+    payload: data,
+  });
+};
+
