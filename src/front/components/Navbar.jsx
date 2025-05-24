@@ -12,7 +12,7 @@ export const Navbar = () => {
 	return (
 		<>
 		
-			<div className="navbar navbar-expand-lg " >
+			<div className="navbar navbar-expand-lg container-fluid" >
 				<div className="d-flex align-items-center">
 					<Link to="#" className="menu-bars me-3" onClick={showSideBar}>
 						<i className="fa-solid fa-bars"></i>

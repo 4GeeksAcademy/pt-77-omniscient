@@ -1,8 +1,8 @@
 // Import necessary hooks and functions from React.
 import { useContext, useReducer, createContext } from "react";
 import storeReducer, { initialStore } from "../store"  // Import the reducer and the initial state.
-import {signup as handleSignup, login as handleLogin, getUser as handleGetUser} from "../Actions"
-import { getVintageGames } from "../IdgbActions";
+import {signup as handleSignup, login as handleLogin, getUser as handleGetUser, getVintageGames} from "../Actions"
+
 // Create a context to hold the global state of the application
 // We will call this global state the "store" to avoid confusion while using local states
 const StoreContext = createContext()
