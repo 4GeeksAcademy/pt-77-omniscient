@@ -74,7 +74,7 @@ export const getRawgGames = async (dispatch, payload) => {
   });
 };
 
-export const getGameDescription = async (dispatch, payload, slug) => {
+export const getGameDescription = async (slug) => {
   const response = await fetch(`https://api.rawg.io/api/games/${slug}?key=e09cf7c5817241ee825687b3373f921f`);
   const data = await response.json();
   return {

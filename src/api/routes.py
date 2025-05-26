@@ -32,7 +32,7 @@ def get_vintage_games():
     response = requests.post(
         "https://api.igdb.com/v4/games",
         headers=headers,
-        data="fields name,cover.url,genres.name,first_release_date; limit 10;"
+        data="fields name,summary,cover.url,genres.name,first_release_date; limit 10;"
     )
 
     return jsonify(response.json())

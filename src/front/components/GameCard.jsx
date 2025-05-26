@@ -14,7 +14,8 @@ export const GameCard = (props) => {
           alt="gameImage"
           style={{ height: "300px", objectFit: "cover" }}
         />
-        <h5 className="card-title">{props.name}</h5>
+        <h4 className="card-title">{props.name}</h4>
+        <h5 className="retroBio">{props.description}</h5>
 
         {/* <Link to={`/planet/${props.uid}`} className="btn btn-primary">
           More Info

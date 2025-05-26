@@ -23,7 +23,7 @@ export const RetroGames = () => {
     <div className="text-center mt-5">
 
       {retroGames?.map((vintageGames, index) => {
-        return <GameCard key={vintageGames.uid} type={"vintageGames"} name={vintageGames.name} uid={vintageGames.id} img={vintageGames.cover.url} />
+        return <GameCard key={vintageGames.uid} type={"vintageGames"} name={vintageGames.name} uid={vintageGames.uid} img={vintageGames.cover.url} summary={vintageGames.summary}/>
       })}
 
     </div>
