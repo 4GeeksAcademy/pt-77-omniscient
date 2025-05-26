@@ -5,6 +5,7 @@ import { RawgGameCard } from "../components/RawgGameCard.jsx";
 export const Games = () => {
   const { store } = useGlobalReducer();
   const [games, setGames] = useState([]);
+  const [gamesWithDescriptions, setGamesWithDescriptions] = useState([]);
 
   useEffect(() => {
     fetch("https://api.rawg.io/api/games?key=e09cf7c5817241ee825687b3373f921f")
@@ -31,9 +32,32 @@ export const Games = () => {
     setGames(store.rawgGames?.results || store.rawgGames || []);
   }, [store.rawgGames]);
 
+  useEffect(() => {
+  const fetchDescriptions = async () => {
+    if (games.length === 0) return;
+
+    const enrichedGames = await Promise.all(
+      games.map(async (game) => {
+        try {
+          const res = await fetch(`https://api.rawg.io/api/games/${game.slug}?key=e09cf7c5817241ee825687b3373f921f`);
+          const data = await res.json();
+          return { ...game, description: data.description_raw || "" };
+        } catch (error) {
+          console.error(`Failed to fetch description for ${game.name}`, error);
+          return { ...game, description: "" };
+        }
+      })
+    );
+
+    setGamesWithDescriptions(enrichedGames);
+  };
+
+  fetchDescriptions();
+}, [games]);
+
   return (
     <div className="text-center mt-5">
-      {games.map((rawgGame) => (
+      {gamesWithDescriptions.map((rawgGame) => (
         <RawgGameCard
           key={rawgGame.id}
           img={rawgGame.background_image}
