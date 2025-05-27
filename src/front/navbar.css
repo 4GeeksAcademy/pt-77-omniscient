@@ -23,6 +23,7 @@
     top: 0;
     left: -100%;
     transition: 850ms;
+    z-index: 1001;
 }
 
 .nav-menu.active {
@@ -70,5 +71,14 @@
 
 span {
     margin-left: 16px;
+}
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.4); /* semi-transparent black */
+  z-index: 1000; /* BELOW the sidebar */
 }
 
