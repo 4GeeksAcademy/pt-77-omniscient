@@ -43,11 +43,8 @@ export const GameCard = (props) => {
           }}
         />
         <h4 className="card-title">{props.name}</h4>
-        <h5 className="retroBio">{props.description}</h5>
+        <h5 className="retroBio">{props.summary}</h5>
 
-        {/* <Link to={`/planet/${props.uid}`} className="btn btn-primary">
-          More Info
-        </Link> */}
        
         <button className="btn btn-primary" >Add to Cart</button>
       </div>
