@@ -66,6 +66,7 @@ export const Navbar = () => {
 
 
 			</nav>
+			{sidebar && <div className="overlay" onClick={showSideBar}></div>}
 
 		</>
 	);
