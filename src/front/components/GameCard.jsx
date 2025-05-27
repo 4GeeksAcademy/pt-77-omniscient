@@ -42,11 +42,13 @@ export const GameCard = (props) => {
             borderRadius: ".5rem",
           }}
         />
-        <h5 className="card-title">{props.name}</h5>
-        <p className="card-text">
-          Some quick example text to build on the card title and make up the
-          bulk of the card’s content.
-        </p>
+        <h4 className="card-title">{props.name}</h4>
+        <h5 className="retroBio">{props.description}</h5>
+
+        {/* <Link to={`/planet/${props.uid}`} className="btn btn-primary">
+          More Info
+        </Link> */}
+       
         <button className="btn btn-primary" >Add to Cart</button>
       </div>
     </div>

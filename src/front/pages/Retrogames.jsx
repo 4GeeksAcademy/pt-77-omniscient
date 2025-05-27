@@ -34,6 +34,8 @@ export const RetroGames = () => {
       </div>
 <div className="row">
       {retroGames?.map((vintageGames, index) => {
+        return <GameCard key={vintageGames.uid} type={"vintageGames"} name={vintageGames.name} uid={vintageGames.uid} img={vintageGames.cover.url} summary={vintageGames.summary}/>
+      })}
         return (
           <div key={vintageGames.uid} className="col-6 col-md-4 col-lg-3 mb-4">
           <GameCard
@@ -42,6 +44,7 @@ export const RetroGames = () => {
             name={vintageGames.name}
             uid={vintageGames.id}
             img={vintageGames.cover.url}
+            summary={vintageGames.summary}
           />
           </div>
         
