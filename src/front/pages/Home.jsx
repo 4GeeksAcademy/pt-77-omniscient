@@ -3,6 +3,7 @@ import useGlobalReducer from "../hooks/useGlobalReducer.jsx";
 import projectimage1 from "../assets/img/projectimage1.png";
 import { Carousel } from "../components/Carousel.jsx";
 
+
 export const Home = () => {
 	const { store, dispatch, getVintageGames } = useGlobalReducer();
 	const [retroGames, setRetroGames] = useState([]);

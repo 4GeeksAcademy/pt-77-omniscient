@@ -14,9 +14,9 @@ export function StoreProvider({ children }) {
     const [store, dispatch] = useReducer(storeReducer, initialStore())
     // Provide the store and dispatch method to all child components.
     const actions = {
-        signup: (payload) => setSignup(dispatch, payload),
-        login: (payload) => setLogin(dispatch, payload),
-        getUser: (payload) => setGetUser(dispatch, payload),
+        signup: (payload) => handleSignup(dispatch, payload),
+        login: (payload) => handleLogin(dispatch, payload),
+        getUser: (payload) => handleGetUser(dispatch, payload),
         getVintageGames: (payload) => getVintageGames(dispatch, payload),
         getRawgGames: (payload) => getRawgGames(dispatch, payload),
         getGameDescription: (payload) => getGameDescription(dispatch, payload)
@@ -28,6 +28,6 @@ export function StoreProvider({ children }) {
 
 // Custom hook to access the global state and dispatch function.
 export default function useGlobalReducer() {
-    const { dispatch, store, handleSignup, handleLogin, handleGetUser, getVintageGames, getRawgGames, getGameDescription } = useContext(StoreContext)
-    return { dispatch, store, handleSignup, handleLogin, handleGetUser, getVintageGames, getRawgGames, getGameDescription };
+    const { dispatch, store, signup, login, getUser, getVintageGames, getRawgGames, getGameDescription } = useContext(StoreContext)
+    return { dispatch, store, signup, login, getUser, getVintageGames, getRawgGames, getGameDescription };
 }
