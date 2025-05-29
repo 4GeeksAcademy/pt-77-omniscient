@@ -12,7 +12,7 @@ export const Signup = () => {
   const handleSignUp = (e) => {
     e.preventDefault();
     signup(user);
-    navigate("/");
+    navigate("/login");
   };
 
   return (

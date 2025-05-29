@@ -28,7 +28,7 @@ export const login = async (dispatch, payload) => {
 };
 
 export const getUser = async (dispatch, payload) => {
-  let response = await fetch(import.meta.env.VITE_BACKEND_URL +"/private", {
+  let response = await fetch(import.meta.env.VITE_BACKEND_URL +"/profile", {
     method: "Get",
     headers: { Authorization: "Bearer" + payload },
   });
@@ -82,5 +82,28 @@ export const getGameDescription = async (slug) => {
     name: data.name,
     description: data.description_raw || data.description,
   };
+};
+
+export const getUserById = async (userId) => {
+  try {
+    const response = await fetch(`${process.env.BACKEND_URL}/api/users/${userId}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${store.access_token}`, 
+      },
+    });
+
+    if (!response.ok) throw new Error("User not found");
+
+    const data = await response.json();
+
+    dispatch({
+      type: "set_user",
+      payload: data,
+    });
+  } catch (error) {
+    console.error("Error fetching user by ID:", error);
+  }
 };
 

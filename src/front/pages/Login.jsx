@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import useGlobalReducer from "../hooks/useGlobalReducer.jsx";
 import { useNavigate } from "react-router-dom";
 
+
 export const Login = () => {
   const { store, dispatch, login } = useGlobalReducer();
   const [user, setUser] = useState({ email: "", password: "" });
@@ -9,7 +10,7 @@ export const Login = () => {
 
   const handleLogin = () => {
     login(user);
-    navigate("/");
+    navigate("/profile");
   };
 
   return (

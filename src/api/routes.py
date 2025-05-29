@@ -48,7 +48,7 @@ def handle_signup():
     body_email = body['email']
     body_password = hashlib.sha256(
         body['password'].encode("utf-8")).hexdigest()
-    user = User(email=body_email, password=body_password, is_active = True)
+    user = User(email=body_email, password=body_password, is_active=True)
 
     db.session.add(user)
     db.session.commit()
@@ -70,7 +70,7 @@ def handle_login():
         return jsonify(access_token=access_token)
 
 
-@api.route('/private', methods=['GET'])
+@api.route('/profile', methods=['GET'])
 @jwt_required()
 def get_user():
     user_email = get_jwt_identity()
@@ -78,6 +78,19 @@ def get_user():
 
     return jsonify(user=user.serialize()), 200
 
+
+@api.route("/api/users/<int:user_id>", methods=["GET"])
+@jwt_required()
+def get_user_by_id(user_id):
+    user = User.query.get(user_id)
+    if not user:
+        return jsonify({"error": "User not found"}), 404
+
+    return jsonify({
+        "id": user.id,
+        "email": user.email,
+        "name": user.name,
+    }), 200
 
 # @api.route('/games', methods=['GET'])
 # def get_rawg_games():
