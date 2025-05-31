@@ -25,6 +25,7 @@ export const RetroGames = () => {
              backgroundImage: `url(${projectimage1})`,
              backgroundSize: "cover",
              backgroundPosition: "center",
+             backgroundAttachment: "fixed",
              backgroundRepeat: "no-repeat",
             //  height: "100vh",
              width: "100vw",

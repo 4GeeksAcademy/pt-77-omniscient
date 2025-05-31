@@ -57,20 +57,20 @@ export const getVintageGames = async (dispatch, payload) => {
   });
 };
 
-export const getRawgGames = async (dispatch, payload) => {
+export const getRawgGames = async (dispatch) => {
   let response = await fetch("https://api.rawg.io/api/games?key=e09cf7c5817241ee825687b3373f921f", {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify(payload),
+   
   });
-
-  let data = await response.json();
+const data = await response.json();
+  
 
   dispatch({
     type: "add_RawgGames",
-    payload: data,
+    payload: data.results,
   });
 };
 
