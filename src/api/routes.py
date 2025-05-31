@@ -65,9 +65,9 @@ def handle_login():
     user = User.query.filter_by(email=body_email).first()
     if user and user.password == body_password:
         access_token = create_access_token(identity=user.email)
-        return jsonify(access_token=access_token)
+        return jsonify(user=user.serialize(), access_token=access_token)
     else:
-        return jsonify(access_token=access_token)
+        return jsonify("user not found")
 
 
 @api.route('/profile', methods=['GET'])
@@ -79,18 +79,14 @@ def get_user():
     return jsonify(user=user.serialize()), 200
 
 
-@api.route("/api/users/<int:user_id>", methods=["GET"])
+@api.route("/user", methods=["GET"])
 @jwt_required()
 def get_user_by_id(user_id):
     user = User.query.get(user_id)
     if not user:
         return jsonify({"error": "User not found"}), 404
 
-    return jsonify({
-        "id": user.id,
-        "email": user.email,
-        "name": user.name,
-    }), 200
+    return jsonify(user.serialize()), 200
 
 # @api.route('/games', methods=['GET'])
 # def get_rawg_games():
