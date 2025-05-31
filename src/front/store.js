@@ -3,7 +3,7 @@ export const initialStore = () => {
     message: null,
     user: null,
 
-    access_token: sessionStorage.getItem("access_token"),
+    access_token: localStorage.getItem("access_token"),
     vintageGames: [],
     rawgGames: [],
     save_for_later: [],
@@ -14,7 +14,7 @@ export default function storeReducer(store, action = {}) {
   switch (action.type) {
     case "set_user":
       const { user, access_token } = action.payload;
-      sessionStorage.setItem("access_token", access_token);
+      localStorage.setItem("access_token", access_token);
 
       return {
         ...store,

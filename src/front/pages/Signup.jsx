@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import useGlobalReducer from "../hooks/useGlobalReducer.jsx";
 import { useNavigate } from "react-router-dom";
 
+
+
 export const Signup = () => {
   const { store, dispatch, signup } = useGlobalReducer();
   const [user, setUser] = useState({email:"", password: ""});
@@ -10,7 +12,7 @@ export const Signup = () => {
   const handleSignUp = (e) => {
     e.preventDefault();
     signup(user);
-    navigate("/");
+    navigate("/login");
   };
 
   return (

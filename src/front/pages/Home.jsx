@@ -4,6 +4,7 @@ import projectimage1 from "../assets/img/projectimage1.png";
 import { Carousel } from "../components/Carousel.jsx";
 import { RawgGameCarousel } from "../components/RawgGameCarousel.jsx";
 
+
 export const Home = () => {
   const { store, dispatch, getVintageGames, getRawgGames } = useGlobalReducer();
   const [retroGames, setRetroGames] = useState([]);

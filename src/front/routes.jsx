@@ -15,8 +15,9 @@ import { Merch } from "./pages/Merch";
 import { Checkout } from "./pages/Checkout";
 import { Login } from "./pages/Login";
 import { Signup } from "./pages/Signup";
-import { Private } from "./pages/private";
 import { GameDetails } from "./pages/GamesDetail";
+import { Profile } from "./pages/profile";
+
 
 export const router = createBrowserRouter(
   createRoutesFromElements(
@@ -38,8 +39,8 @@ export const router = createBrowserRouter(
         <Route path="/checkout" element={<Checkout />} />
         <Route path="/login/" element={<Login />} />
         <Route path="/signup/" element={<Signup />} />
-        <Route path="/profile/:theId" element={<Private />} />
         <Route path="/game/:slug" element={<GameDetails />} />
+        <Route path="/profile/:theId" element={<Profile />} />
       </Route>
     )
 );
