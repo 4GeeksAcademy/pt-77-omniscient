@@ -5,7 +5,7 @@ from flask import Flask, request, jsonify, url_for, Blueprint
 from api.models import db, User
 from api.utils import generate_sitemap, APIException
 from flask_cors import CORS
-from flask_jwt_extended import get_jwt_identity, create_access_token, jwt_required, create_access_token
+from flask_jwt_extended import get_jwt_identity, create_access_token, jwt_required
 import hashlib
 import requests
 
@@ -48,7 +48,7 @@ def handle_signup():
     body_email = body['email']
     body_password = hashlib.sha256(
         body['password'].encode("utf-8")).hexdigest()
-    user = User(email=body_email, password=body_password)
+    user = User(email=body_email, password=body_password, is_active=True)
 
     db.session.add(user)
     db.session.commit()
@@ -64,13 +64,13 @@ def handle_login():
         body['password'].encode("utf-8")).hexdigest()
     user = User.query.filter_by(email=body_email).first()
     if user and user.password == body_password:
-        access_token = create_access_token(identify=user.email)
-        return jsonify(access_token=access_token)
+        access_token = create_access_token(identity=user.email)
+        return jsonify(user=user.serialize(), access_token=access_token)
     else:
-        return jsonify(access_token=access_token)
+        return jsonify("user not found")
 
 
-@api.route('/private', methods=['Get'])
+@api.route('/profile', methods=['GET'])
 @jwt_required()
 def get_user():
     user_email = get_jwt_identity()
@@ -78,6 +78,15 @@ def get_user():
 
     return jsonify(user=user.serialize()), 200
 
+
+@api.route("/user", methods=["GET"])
+@jwt_required()
+def get_user_by_id(user_id):
+    user = User.query.get(user_id)
+    if not user:
+        return jsonify({"error": "User not found"}), 404
+
+    return jsonify(user.serialize()), 200
 
 # @api.route('/games', methods=['GET'])
 # def get_rawg_games():

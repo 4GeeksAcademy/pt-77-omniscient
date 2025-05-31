@@ -9,8 +9,12 @@ export const Login = () => {
 
   const handleLogin = () => {
     login(user);
-    navigate("/");
   };
+
+  useEffect(() => {
+    store.user ? navigate("/profile/" + store.user.id) : navigate("/login");
+    
+  }, [store.user]);
 
   return (
     <div className="text-center mt-5">
