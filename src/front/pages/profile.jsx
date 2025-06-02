@@ -22,32 +22,37 @@ export const Profile = () => {
     }
   }, [store.user]);
 
- return (
-  <div
-    className="text-center container-fluid"
-    style={{
-      backgroundImage: `url(${projectimage1})`,
-      backgroundSize: "cover",
-      backgroundPosition: "center center",
-      backgroundRepeat: "no-repeat",
-      backgroundAttachment: "fixed",
-      minHeight: "100vh",
-      width: "100vw",
-      display: "flex",
-      flexDirection: "column",
-      alignItems: "center",
-    }}
-  >
-    <div className="account-card mx-auto mt-10 p-6 rounded-2xl text-white text-center bg-[#4A007D] shadow-lg">
-      <div className="photo mb-4">
-        <div className="w-24 h-24 mx-auto bg-[#FF4081] rounded-full mb-4"></div>
-        <h2 className="username text-xl font-bold">{message}</h2>
-        <p className="about text-sm mt-2 text-gray-200">
-          A game addict. I've been playing games since I was 9, so you can say
-          it's part of my life.
-        </p>
+  return (
+    <div
+      className="text-center container-fluid"
+      style={{
+        backgroundImage: `url(${projectimage1})`,
+        backgroundSize: "cover",
+        backgroundPosition: "center center",
+        backgroundRepeat: "no-repeat",
+        backgroundAttachment: "fixed",
+        minHeight: "100vh",
+        width: "100vw",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+      }}
+    >
+      <div className="account-card mx-auto mt-10 p-6 rounded-2xl text-white text-center bg-[#4A007D] shadow-lg">
+        <div className="photo mb-4">
+          <img src="..." class="img-fluid" alt="..."></img>
+          <h2 className="username text-xl font-bold">{message}</h2>
+          <p className="about-user"><strong>About</strong></p>
+          <p className="about text-sm text-gray-200">
+            A game addict. I've been playing games since I was 9, so you can say
+            it's part of my life.
+          </p>
+        </div>
+      </div>
+      <div className="saved-games-card">
+        <h2><strong>Saved Games</strong></h2>
+
       </div>
     </div>
-  </div>
-);
+  );
 };
