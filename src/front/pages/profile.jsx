@@ -7,6 +7,9 @@ export const Profile = () => {
   const { theId } = useParams();
   const { store, getUserById } = useGlobalReducer();
   const [message, setMessage] = useState("");
+  const [about, setAbout] = useState("");
+  const [isEditing, setIsEditing] = useState(false);
+  const [successMsg, setSuccessMsg] = useState("");
 
   useEffect(() => {
     if (theId) {
@@ -18,9 +21,34 @@ export const Profile = () => {
     if (store.user == null) {
       setMessage("User not found or not logged in.");
     } else {
-      setMessage(`Hello ${store.user.email}`);
+      setMessage(`Hello! ${store.user.email}`);
+      setAbout(store.user.about || "");
     }
   }, [store.user]);
+
+  const handleSave = async () => {
+    const token = localStorage.getItem("token");
+    try {
+      const response = await fetch(`${process.env.BACKEND_URL}/api/profile`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ about }),
+      });
+
+      const data = await response.json();
+      if (response.ok) {
+        setSuccessMsg("About updated successfully!");
+        setIsEditing(false);
+      } else {
+        setSuccessMsg(`Error: ${data.error || "Something went wrong"}`);
+      }
+    } catch (err) {
+      setSuccessMsg("Failed to update about info.");
+    }
+  };
 
   return (
     <div
@@ -42,16 +70,48 @@ export const Profile = () => {
         <div className="photo mb-4">
           <img src="..." class="img-fluid" alt="..."></img>
           <h2 className="username text-xl font-bold">{message}</h2>
-          <p className="about-user"><strong>About</strong></p>
-          <p className="about text-sm text-gray-200">
-            A game addict. I've been playing games since I was 9, so you can say
-            it's part of my life.
+          <p className="about-user">
+            <strong>About</strong>
           </p>
+          {isEditing ? (
+            <div>
+              <textarea
+                className="text-sm text-gray-800 p-2 rounded w-full"
+                value={about}
+                onChange={(e) => setAbout(e.target.value)}
+                rows={4}
+              />
+              <button
+                className=" save mt-2 bg-white text-[#4A007D] px-4 py-1 rounded font-bold"
+                onClick={handleSave}
+              >
+                Save
+              </button>
+              <button
+                className=" delete mt-2 ml-2 bg-gray-300 text-black px-4 py-1 rounded font-bold"
+                onClick={() => setIsEditing(false)}
+              >
+                Delete
+              </button>
+              <p className="text-green-200 mt-2">{successMsg}</p>
+            </div>
+          ) : (
+            <div>
+              <p className="edit text-sm text-gray-200">{about}</p>
+              <button
+                className="mt-2 bg-white text-[#4A007D] px-4 py-1 rounded font-bold"
+                onClick={() => setIsEditing(true)}
+              >
+                Edit
+              </button>
+            </div>
+          )}
         </div>
       </div>
       <div className="saved-games-card">
-        <h2><strong>Saved Games</strong></h2>
-
+        <h2>
+          <strong>Saved Games</strong>
+        </h2>
       </div>
     </div>
   );

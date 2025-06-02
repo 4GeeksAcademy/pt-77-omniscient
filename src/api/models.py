@@ -11,11 +11,13 @@ class User(db.Model):
         String(120), unique=True, nullable=False)
     password: Mapped[str] = mapped_column(nullable=False)
     is_active: Mapped[bool] = mapped_column(Boolean(), nullable=False)
+    about = db.Column(db.Text, nullable=True)
 
     def serialize(self):
         return {
             "id": self.id,
             "email": self.email,
+             "about": self.about,
         }
     
 

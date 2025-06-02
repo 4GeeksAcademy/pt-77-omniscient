@@ -88,31 +88,25 @@ def get_user_by_id(user_id):
 
     return jsonify(user.serialize()), 200
 
-# @api.route('/games', methods=['GET'])
-# def get_rawg_games():
+@api.route('/profile', methods=['PUT'])
+@jwt_required()
+def update_profile():
+    user_email = get_jwt_identity()
+    user = User.query.filter_by(email=user_email).first()
 
-#     search = request.args.get('search', '')
-#     page = request.args.get('page', 1)
-#     page_size = request.args.get('page_size', 10)
+    if not user:
+        return jsonify({"error": "User not found"}), 404
 
-#     params = {
-#         'key': "e09cf7c5817241ee825687b3373f921f",
-#         'search': search,
-#         'page': page,
-#         'page_size': page_size
-#     }
+    data = request.get_json()
 
-#     try:
-#         response = requests.get('https://api.rawg.io/api/games', params=params, headers={
-#             'Accept': 'application/json',
-#             'User-Agent': 'MyGameApp/1.0'
-#         })
+    if 'about' in data:
+        user.about = data['about']
 
-#         if response.status_code != 200:
-#             return jsonify({'error': 'Failed to fetch games from RAWG'}), response.status_code
+    db.session.commit()
 
-#         return jsonify(response.json()), 200
+    return jsonify({"message": "Profile updated", "user": user.serialize()}), 200
 
-#     except Exception as e:
-#         print("RAWG fetch error:", e)
-#         return jsonify({'error': 'Server error'}), 500
+
+    
+
+

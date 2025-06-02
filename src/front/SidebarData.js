@@ -25,7 +25,7 @@ export const SidebarData =[
     },
         {
         title: "Profile",
-        path: "/profile",
+        path: "/profile/:theId",
         icon: "fa-solid fa-user",
         cName: "nav-text"
     },
