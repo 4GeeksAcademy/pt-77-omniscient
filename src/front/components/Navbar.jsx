@@ -13,7 +13,7 @@ export const Navbar = () => {
 
   useEffect(() => {
     if (store.token) {
-      fetchUserInfo();
+      getUserById();
     }
   }, [store.token]);
   return (

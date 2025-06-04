@@ -81,12 +81,16 @@ def get_user():
 
 @api.route("/user", methods=["GET"])
 @jwt_required()
-def get_user_by_id(user_id):
-    user = User.query.get(user_id)
+def get_user_by_id():
+    user_email = get_jwt_identity()
+    user = User.query.filter_by(email=user_email).first()
+
     if not user:
         return jsonify({"error": "User not found"}), 404
+        
+    access_token = create_access_token(identity=user.email)
+    return jsonify(user=user.serialize(), access_token=access_token), 200
 
-    return jsonify(user.serialize()), 200
 
 @api.route('/profile', methods=['PUT'])
 @jwt_required()
@@ -105,8 +109,3 @@ def update_about():
     db.session.commit()
 
     return jsonify({"message": "Profile updated", "user": user.serialize()}), 200
-
-
-    
-
-

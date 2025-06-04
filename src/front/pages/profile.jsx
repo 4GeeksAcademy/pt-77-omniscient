@@ -6,7 +6,7 @@ import useGlobalReducer from "../hooks/useGlobalReducer.jsx";
 export const Profile = () => {
   const navigate = useNavigate();
   const { theId } = useParams();
-  const { store, getUserById } = useGlobalReducer();
+  const { store, dispatch, getUserById } = useGlobalReducer();
   const [message, setMessage] = useState("");
   const [about, setAbout] = useState("");
   const [isEditing, setIsEditing] = useState(false);
@@ -19,10 +19,10 @@ export const Profile = () => {
   }, [theId]);
 
   useEffect(() => {
-  if (store.user?.about !== undefined) {
-    setAbout(store.user.about);
-  }
-}, [store.user?.about]);
+    if (store.user?.about !== undefined) {
+      setAbout(store.user.about);
+    }
+  }, [store.user?.about]);
 
   useEffect(() => {
     console.log("Checking auth", store.access_token, store.user);
@@ -36,10 +36,10 @@ export const Profile = () => {
   }, [store.user, store.access_token]);
 
   const handleSave = async () => {
-    const token = localStorage.getItem("token");
+    const token = sessionStorage.getItem("access_token");
     try {
       const response = await fetch(
-        `${import.meta.env.VITE_BACKEND_URL}/api/profile`,
+        `${import.meta.env.VITE_BACKEND_URL}/profile`,
         {
           method: "PUT",
           headers: {
@@ -49,23 +49,21 @@ export const Profile = () => {
           body: JSON.stringify({ about }),
         }
       );
-
-     const data = await response.json();
-    if (response.ok) {
-      dispatch({
-        type: "update_about",
-        payload: about,
-      }); 
-
-      setSuccessMsg("About updated successfully!");
-      setIsEditing(false);
-    } else {
-      setSuccessMsg(`Error: ${data.error || "Something went wrong"}`);
+      const data = await response.json();
+      if (response.ok) {
+        dispatch({
+          type: "update_about",
+          payload: about,
+        });
+        setSuccessMsg("About updated successfully!");
+        setIsEditing(false);
+      } else {
+        setSuccessMsg(`Error: ${data.error || "Something went wrong"}`);
+      }
+    } catch (err) {
+      setSuccessMsg("Failed to update about info.");
     }
-  } catch (err) {
-    setSuccessMsg("Failed to update about info.");
-  }
-};
+  };
 
   return (
     <div
@@ -95,7 +93,7 @@ export const Profile = () => {
               <textarea
                 className="text-sm text-gray-800 p-2 rounded w-full bg-transparent border-none"
                 value={about}
-                onChange={(e) => setAbout(e.target.value)}  
+                onChange={(e) => setAbout(e.target.value)}
                 rows={4}
               />
               <button
