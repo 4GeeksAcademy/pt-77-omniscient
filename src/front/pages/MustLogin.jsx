@@ -21,6 +21,7 @@ export const MustLogin = () => {
         }}
       >
         <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 text-center">
+          <h1 className="arise text-white"><strong>ARISE!</strong></h1>
           <h1 className="mx-auto text-3xl font-bold text-white">
             You must be logged in
           </h1>

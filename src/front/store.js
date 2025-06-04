@@ -40,6 +40,15 @@ export default function storeReducer(store, action = {}) {
         save_for_later: [...store.save_for_later, action.payload],
       };
 
+      case "update_about":
+  return {
+    ...store,
+    user: {
+      ...store.user,
+      about: action.payload,
+    },
+  };
+
     default:
       throw Error("Unknown action.");
   }

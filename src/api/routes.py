@@ -90,7 +90,7 @@ def get_user_by_id(user_id):
 
 @api.route('/profile', methods=['PUT'])
 @jwt_required()
-def update_profile():
+def update_about():
     user_email = get_jwt_identity()
     user = User.query.filter_by(email=user_email).first()
 

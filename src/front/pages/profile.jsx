@@ -19,6 +19,12 @@ export const Profile = () => {
   }, [theId]);
 
   useEffect(() => {
+  if (store.user?.about !== undefined) {
+    setAbout(store.user.about);
+  }
+}, [store.user?.about]);
+
+  useEffect(() => {
     console.log("Checking auth", store.access_token, store.user);
     if (!store.access_token || !store.user) {
       console.log("Redirecting to /must-login");
@@ -32,26 +38,34 @@ export const Profile = () => {
   const handleSave = async () => {
     const token = localStorage.getItem("token");
     try {
-      const response = await fetch(`${process.env.BACKEND_URL}/api/profile`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({ about }),
-      });
+      const response = await fetch(
+        `${import.meta.env.VITE_BACKEND_URL}/api/profile`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ about }),
+        }
+      );
 
-      const data = await response.json();
-      if (response.ok) {
-        setSuccessMsg("About updated successfully!");
-        setIsEditing(false);
-      } else {
-        setSuccessMsg(`Error: ${data.error || "Something went wrong"}`);
-      }
-    } catch (err) {
-      setSuccessMsg("Failed to update about info.");
+     const data = await response.json();
+    if (response.ok) {
+      dispatch({
+        type: "update_about",
+        payload: about,
+      }); 
+
+      setSuccessMsg("About updated successfully!");
+      setIsEditing(false);
+    } else {
+      setSuccessMsg(`Error: ${data.error || "Something went wrong"}`);
     }
-  };
+  } catch (err) {
+    setSuccessMsg("Failed to update about info.");
+  }
+};
 
   return (
     <div
@@ -71,7 +85,7 @@ export const Profile = () => {
     >
       <div className="account-card mx-auto mt-10 p-6 rounded-2xl text-white text-center bg-[#4A007D] shadow-lg">
         <div className="photo mb-4">
-          <img src="..." class="img-fluid" alt="..."></img>
+          <img src="..." className="img-fluid" alt="..."></img>
           <h2 className="username text-xl font-bold">{message}</h2>
           <p className="about-user">
             <strong>About</strong>
@@ -79,9 +93,9 @@ export const Profile = () => {
           {isEditing ? (
             <div>
               <textarea
-                className="text-sm text-gray-800 p-2 rounded w-full"
+                className="text-sm text-gray-800 p-2 rounded w-full bg-transparent border-none"
                 value={about}
-                onChange={(e) => setAbout(e.target.value)}
+                onChange={(e) => setAbout(e.target.value)}  
                 rows={4}
               />
               <button

@@ -30,7 +30,7 @@ export const login = async (dispatch, payload) => {
 export const getUser = async (dispatch, payload) => {
   let response = await fetch(import.meta.env.VITE_BACKEND_URL + "/profile", {
     method: "Get",
-    headers: { Authorization: "Bearer" + payload },
+    headers: { Authorization: "Bearer " + payload },
   });
   let data = await response.json();
 
@@ -66,7 +66,6 @@ export const getRawgGames = async (dispatch, payload) => {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(payload),
     }
   );
 
