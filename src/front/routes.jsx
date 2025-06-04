@@ -17,6 +17,7 @@ import { Login } from "./pages/Login";
 import { Signup } from "./pages/Signup";
 import { GameDetails } from "./pages/GamesDetail";
 import { Profile } from "./pages/profile";
+import { MustLogin } from "./pages/MustLogin";
 
 
 export const router = createBrowserRouter(
@@ -41,6 +42,7 @@ export const router = createBrowserRouter(
         <Route path="/signup/" element={<Signup />} />
         <Route path="/game/:slug" element={<GameDetails />} />
         <Route path="/profile/:theId" element={<Profile />} />
+        <Route path="/must-login" element={<MustLogin />} />
       </Route>
     )
 );

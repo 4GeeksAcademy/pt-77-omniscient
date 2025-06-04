@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import projectimage1 from "../assets/img/projectimage1.png";
 import useGlobalReducer from "../hooks/useGlobalReducer.jsx";
 
 export const Profile = () => {
+  const navigate = useNavigate();
   const { theId } = useParams();
   const { store, getUserById } = useGlobalReducer();
   const [message, setMessage] = useState("");
@@ -18,13 +19,15 @@ export const Profile = () => {
   }, [theId]);
 
   useEffect(() => {
-    if (store.user == null) {
-      setMessage("User not found or not logged in.");
+    console.log("Checking auth", store.access_token, store.user);
+    if (!store.access_token || !store.user) {
+      console.log("Redirecting to /must-login");
+      navigate("/must-login");
     } else {
       setMessage(`Hello! ${store.user.email}`);
       setAbout(store.user.about || "");
     }
-  }, [store.user]);
+  }, [store.user, store.access_token]);
 
   const handleSave = async () => {
     const token = localStorage.getItem("token");
