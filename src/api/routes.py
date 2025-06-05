@@ -22,20 +22,44 @@ ACCESS_TOKEN = "x3du3wpyr1fvn0jmmrtyzsq6sek9w0"
 
 @api.route('/retrogames', methods=['POST'])
 def get_vintage_games():
-    # payload = request.get_json()
+    payload = request.get_json() or {}
+    limit = payload.get('limit', 20)     # default limit = 20
+    offset = payload.get('offset', 0)    # default offset = 0
 
     headers = {
         "Client-ID": CLIENT_ID,
         "Authorization": f"Bearer {ACCESS_TOKEN}",
         "Content-Type": "application/json"
     }
+
+    igdb_query = f"""
+        fields 
+            name,
+            summary,
+            cover.url,
+            genres.name,
+            first_release_date,
+            platforms.name,
+            involved_companies.company.name,
+            involved_companies.developer,
+            rating,
+            screenshots.url;
+        sort first_release_date desc;
+        limit {limit};
+        offset {offset};
+    """
+
     response = requests.post(
         "https://api.igdb.com/v4/games",
         headers=headers,
-        data="fields name,summary,cover.url,genres.name,first_release_date; limit 10;"
+        data=igdb_query
     )
 
-    return jsonify(response.json())
+    if response.status_code != 200:
+        return jsonify({"error": "Failed to fetch games from IGDB"}), response.status_code
+
+    return jsonify(response.json()), 200
+
 
 
 if __name__ == '__main__':

@@ -6,7 +6,7 @@ export const SidebarData =[
         cName: "nav-text"
     },
         {
-        title: "Games",
+        title: "Modern Games",
         path: "/games",
         icon: "fa-solid fa-gamepad",
         cName: "nav-text"
@@ -18,9 +18,9 @@ export const SidebarData =[
         cName: "nav-text"
     },
         {
-        title: "Merch",
+        title: "Video",
         path: "/merch",
-        icon: "fa-solid fa-shirt",
+        icon: "fa-brands fa-youtube",
         cName: "nav-text"
     },
         {

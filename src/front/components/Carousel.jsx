@@ -1,7 +1,6 @@
 import React from "react";
 import useGlobalReducer from "../hooks/useGlobalReducer.jsx";
 
-
 export const Carousel = ({ games }) => {
   if (!games || games.length === 0) {
     return <p>No games to show.</p>;
@@ -16,8 +15,12 @@ export const Carousel = ({ games }) => {
         border: "none",
       }}
     >
-      <div id="carouselExampleIndicators" className="carousel slide" data-bs-ride="carousel"
-  data-bs-interval="3000" >
+      <div
+        id="carouselExampleIndicators"
+        className="carousel slide"
+        data-bs-ride="carousel"
+        data-bs-interval="3000"
+      >
         <div className="carousel-indicators">
           {games.map((game, index) => (
             <button
@@ -40,19 +43,24 @@ export const Carousel = ({ games }) => {
               <div className="d-flex justify-content-center">
                 <img
                   src={
-                    game.img.startsWith("//") ? `https:${game.img}` : game.img
+                    game.img?.startsWith("//")
+                      ? `https:${game.img.replace("t_thumb", "t_720p")}`
+                      : game.img?.replace("t_thumb", "t_720p")
                   }
-                  alt={game.name}
+                  alt={game.name || "Game Image"}
+                  onError={(e) => (e.target.src = "/fallback.jpg")}
                   className="d-block"
                   style={{
                     maxHeight: "18rem",
                     width: "50%",
+                    // maxWidth: "600px",
                     objectFit: "contain",
                   }}
                 />
-                <div className="carousel-caption d-none d-md-block">
+
+                <div className="carousel-caption d-none d-md-block bg-dark bg-opacity-50 rounded p-2">
                   <h5>{game.name}</h5>
-                  <p>{game.description}</p>
+                  {/* <p>{game.description}</p> */}
                 </div>
               </div>
             </div>

@@ -29,7 +29,7 @@ export const RawgGameCarousel = ({ games }) => {
               className={index === 0 ? "active" : ""}
               aria-current={index === 0 ? "true" : undefined}
               aria-label={`Slide ${index + 1}`}
-            />
+            ></button>
           ))}
         </div>
 
