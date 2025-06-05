@@ -12,7 +12,7 @@ export const Login = () => {
   };
 
   useEffect(() => {
-    store.user ? navigate("/profile/" + store.user.id) : navigate("/login");
+    store.user && store.access_token? navigate("/profile/" + store.user.id) : navigate("/login");
     
   }, [store.user]);
 
