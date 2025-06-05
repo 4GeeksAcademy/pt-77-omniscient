@@ -1,9 +1,11 @@
 export const initialStore = () => {
+  const access_token = localStorage.getItem("access_token");
+  const user = JSON.parse(localStorage.getItem("user"));
+
   return {
     message: null,
-    user: null,
-
-    access_token: sessionStorage.getItem("access_token"),
+    user: user || null,
+    access_token: access_token || null,
     vintageGames: [],
     rawgGames: [],
     save_for_later: [],
@@ -15,14 +17,14 @@ export default function storeReducer(store, action = {}) {
     case "set_user":
       const { user, access_token } = action.payload;
       sessionStorage.setItem("access_token", access_token);
+      localStorage.setItem("access_token", access_token);
+      localStorage.setItem("user", JSON.stringify(user));
 
-      if (!store.user || store.access_token) {
-        return {
-          ...store,
-          user: user,
-          access_token: access_token,
-        };
-      }
+      return {
+        ...store,
+        user,
+        access_token,
+      };
 
     case "add_vintageGames":
       return {
@@ -43,15 +45,15 @@ export default function storeReducer(store, action = {}) {
       };
 
     case "update_about":
+      const updatedUser = { ...store.user, about: action.payload };
+      localStorage.setItem("user", JSON.stringify(updatedUser));
       return {
         ...store,
-        user: {
-          ...store.user,
-          about: action.payload,
-        },
+        user: updatedUser,
       };
 
     default:
-      throw Error("Unknown action.");
+      console.error("Unknown action type:", action.type);
+      return store;
   }
 }
