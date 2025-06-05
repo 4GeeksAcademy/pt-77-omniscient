@@ -65,6 +65,33 @@ export const Profile = () => {
     }
   };
 
+  const handleDeleteAbout = async () => {
+  const token = sessionStorage.getItem("access_token");
+
+  try {
+    const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/profile`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ about: "" }), // Send empty string
+    });
+
+    const data = await response.json();
+    if (response.ok) {
+      dispatch({ type: "update_about", payload: "" }); // Clear from store
+      setAbout(""); // Clear from local state
+      setSuccessMsg("About section deleted.");
+      setIsEditing(false); // Exit editing mode
+    } else {
+      setSuccessMsg(`Error: ${data.error || "Something went wrong"}`);
+    }
+  } catch (err) {
+    setSuccessMsg("Failed to delete about section.");
+  }
+};
+
   return (
     <div
       className="text-center container-fluid"
@@ -105,7 +132,7 @@ export const Profile = () => {
               </button>
               <button
                 className=" delete mt-2 bg-gray-300 text-black px-4 py-1 rounded font-bold"
-                onClick={() => setIsEditing(false)}
+                 onClick={handleDeleteAbout}
               >
                 Delete
               </button>
