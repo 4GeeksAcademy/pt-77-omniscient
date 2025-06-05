@@ -12,11 +12,11 @@ export const Profile = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [successMsg, setSuccessMsg] = useState("");
 
-  useEffect(() => {
-    if (theId) {
-      getUserById(theId);
-    }
-  }, [theId]);
+ useEffect(() => {
+  if (theId && !store.user) {
+    getUserById(theId);
+  }
+}, [theId, store.user]);
 
   useEffect(() => {
     if (store.user?.about !== undefined) {
