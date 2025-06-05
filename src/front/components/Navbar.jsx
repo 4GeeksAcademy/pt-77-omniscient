@@ -30,7 +30,7 @@ export const Navbar = () => {
             style={{
               fontFamily: "'Bangers', cursive",
               fontSize: "clamp(1.5rem, 4vw, 3rem)",
-              color: "white",
+              color: "black",
             }}
           >
             OMNISCIENT

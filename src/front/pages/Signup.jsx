@@ -1,49 +1,77 @@
 import React, { useEffect, useState } from "react";
 import useGlobalReducer from "../hooks/useGlobalReducer.jsx";
 import { useNavigate } from "react-router-dom";
-
-
+import projectimage1 from "../assets/img/projectimage1.png";
 
 export const Signup = () => {
-  const { store, dispatch, signup } = useGlobalReducer();
-  const [user, setUser] = useState({email:"", password: ""});
-  const navigate = useNavigate ();
+  const { store, signup } = useGlobalReducer();
+  const [user, setUser] = useState({ email: "", password: "" });
+  const [error, setError] = useState(null);
+  const navigate = useNavigate();
 
-  const handleSignUp = (e) => {
+  const handleSignUp = async (e) => {
     e.preventDefault();
-    signup(user);
-    navigate("/login");
+
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailPattern.test(user.email)) {
+      setError("Please enter a valid email.");
+      return;
+    }
+
+    const success = await signup(user);
+    if (success) {
+      navigate("/login");
+    } else {
+      setError("Sign up failed. Please try again.");
+    }
   };
 
   return (
-    <div className="text-center mt-5">
-      <div className="input-group mb-3 w-50 mx-auto">
-        <input
-         onChange={(e) =>
-            setUser({ ...user, email: e.target.value })
-          }
-          type="email"
-          className="form-control"
-          placeholder="Email"
-          aria-label="email"
-          aria-describedby="basic-addon1"
-        />
-      </div>
-      <div className="input-group mb-3 w-50 mx-auto">
-        <input
-         onChange={(e) =>
-            setUser({ ...user, password: e.target.value })
-          }
-          type="password"
-          className="form-control"
-          placeholder="****"
-          aria-label="psw"
-          aria-describedby="basic-addon1"
-        />
-      </div>
-      <div className="mt-3">
-        <button className="btn btn-primary" onClick={(e) => handleSignUp(e)}>Submit</button>
-      </div>
+    <div
+      className="d-flex justify-content-center"
+      style={{
+        backgroundImage: `url(${projectimage1})`,
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundAttachment: "fixed",
+        backgroundRepeat: "no-repeat",
+        height: "100vh",
+        width: "100vw",
+      }}
+    >
+      <form
+        onSubmit={handleSignUp}
+        className="p-4 rounded w-100"
+        style={{ maxWidth: "400px", marginTop: "100px" }}
+      >
+        <h1 className="text-white text-center mb-4">Sign Up</h1>
+
+        <div className="mb-3">
+          <input
+            onChange={(e) => setUser({ ...user, email: e.target.value })}
+            type="email"
+            className="form-control"
+            placeholder="Email"
+            required
+          />
+        </div>
+
+        <div className="mb-3">
+          <input
+            onChange={(e) => setUser({ ...user, password: e.target.value })}
+            type="password"
+            className="form-control"
+            placeholder="Password"
+            required
+          />
+        </div>
+
+        {error && <div className="text-danger mb-3 text-center">{error}</div>}
+
+        <button type="submit" className="btn btn-primary w-100">
+          Submit
+        </button>
+      </form>
     </div>
   );
 };

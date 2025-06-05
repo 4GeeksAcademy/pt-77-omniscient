@@ -40,15 +40,18 @@ export const getUser = async (dispatch, payload) => {
 };
 
 export const getVintageGames = async (dispatch, payload) => {
+  // Use the passed payload for limit and offset instead of hardcoding
+  const { limit = 500, offset = 0 } = payload || {};
+
   let response = await fetch(import.meta.env.VITE_BACKEND_URL + "/retrogames", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
-   body: JSON.stringify({
-    limit: 500,
-    offset: 0
-  })
+    body: JSON.stringify({
+      limit,
+      offset,
+    }),
   });
 
   let data = await response.json();
@@ -57,7 +60,10 @@ export const getVintageGames = async (dispatch, payload) => {
     type: "add_vintageGames",
     payload: data,
   });
+
+  return data; // Return the data so caller can use it
 };
+
 
 export const getRawgGames = async (dispatch, payload) => {
   let response = await fetch(
