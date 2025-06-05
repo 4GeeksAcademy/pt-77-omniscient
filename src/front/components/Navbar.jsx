@@ -23,20 +23,10 @@ export const Navbar = () => {
           <Link to="#" className="menu-bars me-3" onClick={showSideBar}>
             <i className="fa-solid fa-bars"></i>
           </Link>
-          <span className="navbar-brand mb-0 h1">OMNISCIENT</span>
+          <span className="navbar-brand mb-0 h1" style={{ fontFamily: "'Bangers', cursive", fontSize: "3rem" }}>OMNISCIENT</span>
         </div>
         <div className="d-flex flex-grow-1 justify-content-center">
           <div className="wrap">
-            <div className="search">
-              <input
-                type="text"
-                className="searchTerm"
-                placeholder="What are you looking for?"
-              />
-              <button type="submit" className="searchButton">
-                <i className="fa fa-search"></i>
-              </button>
-            </div>
           </div>
         </div>
 
