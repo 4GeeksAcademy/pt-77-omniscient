@@ -83,32 +83,34 @@ export const Profile = () => {
     >
       <div className="account-card mx-auto mt-10 p-6 rounded-2xl text-white text-center bg-[#4A007D] shadow-lg">
         <div className="photo mb-4">
-          <img src="..." className="img-fluid" alt="..."></img>
-          <h2 className="username text-xl font-bold">{message}</h2>
+          <img src="https://i.pinimg.com/736x/5c/a7/c6/5ca7c68dabec33e530fd510941632abe.jpg" className="img-fluid" alt="..."></img>
+          <h1 className="username text-xl font-bold">{message}</h1>
           <p className="about-user">
-            <strong>About</strong>
+            <h2><strong>About</strong></h2>
           </p>
           {isEditing ? (
             <div>
               <textarea
-                className="text-sm text-gray-800 p-2 rounded w-full bg-transparent border-none"
+                className="text-sm text-white p-2 rounded w-full bg-transparent border-none"
                 value={about}
                 onChange={(e) => setAbout(e.target.value)}
                 rows={4}
               />
+              <div className="save and delete">
               <button
-                className=" save mt-2 bg-white text-[#4A007D] px-4 py-1 rounded font-bold"
+                className=" save mx-auto mt-2 bg-white text-[#4A007D] px-4 py-1 rounded font-bold"
                 onClick={handleSave}
               >
                 Save
               </button>
               <button
-                className=" delete mt-2 ml-2 bg-gray-300 text-black px-4 py-1 rounded font-bold"
+                className=" delete mt-2 bg-gray-300 text-black px-4 py-1 rounded font-bold"
                 onClick={() => setIsEditing(false)}
               >
                 Delete
               </button>
               <p className="text-green-200 mt-2">{successMsg}</p>
+            </div>
             </div>
           ) : (
             <div>
