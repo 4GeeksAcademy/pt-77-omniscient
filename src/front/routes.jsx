@@ -17,6 +17,7 @@ import { Login } from "./pages/Login";
 import { Signup } from "./pages/Signup";
 import { GameDetails } from "./pages/GamesDetail";
 import { Profile } from "./pages/profile";
+import { RetroGameDetails } from "./pages/RetroGameDetail";
 
 
 export const router = createBrowserRouter(
@@ -40,7 +41,9 @@ export const router = createBrowserRouter(
         <Route path="/login/" element={<Login />} />
         <Route path="/signup/" element={<Signup />} />
         <Route path="/game/:slug" element={<GameDetails />} />
+        <Route path="/retrogame/:uid" element={<RetroGameDetails />} />
         <Route path="/profile/:theId" element={<Profile />} />
+
       </Route>
     )
 );

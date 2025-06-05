@@ -45,7 +45,7 @@ export const Home = () => {
             games={retroGames.map((game) => ({
               uid: game.id,
               name: game.name,
-              img: game.cover.url,
+              img: game.cover?.url??"",
             }))}
           />
         )}
