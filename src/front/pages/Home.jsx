@@ -4,7 +4,6 @@ import projectimage1 from "../assets/img/projectimage1.png";
 import { Carousel } from "../components/Carousel.jsx";
 import { RawgGameCarousel } from "../components/RawgGameCarousel.jsx";
 
-
 export const Home = () => {
   const { store, dispatch, getVintageGames, getRawgGames } = useGlobalReducer();
   const [retroGames, setRetroGames] = useState([]);
@@ -33,8 +32,8 @@ export const Home = () => {
         backgroundPosition: "center",
         backgroundAttachment: "fixed",
         backgroundRepeat: "no-repeat",
-        height: "100vh",
-        width: "100vw",
+        minHeight: "100vh", // better than fixed height
+        width: "100%", // responsive width
       }}
     >
       <h1 className="text-white mx-auto text-center p-3">Retro Games</h1>
@@ -45,7 +44,7 @@ export const Home = () => {
             games={retroGames.map((game) => ({
               uid: game.id,
               name: game.name,
-              img: game.cover?.url??"",
+              img: game.cover?.url ?? "",
             }))}
           />
         )}

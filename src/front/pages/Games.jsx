@@ -130,7 +130,7 @@ export const Games = () => {
 
   return (
     <div
-      className="text-center container-fluid"
+      className="text-center container-fluid px-3 px-md-5"
       style={{
         position: "relative",
         backgroundImage: `url(${projectimage1})`,
