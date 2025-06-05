@@ -46,7 +46,7 @@ export const GameCard = (props) => {
     >
       <div className="card-body">
         <img
-          src={`https:${props.img}`}
+          src={`https:${props.img.replace('t_thumb', 't_cover_big')}`}
           className="card-img-top"
           alt="gameImage"
           style={{
@@ -54,6 +54,7 @@ export const GameCard = (props) => {
             objectFit: "contain",
             imageRendering: "auto",
             borderRadius: ".5rem",
+            
           }}
         />
         <h4 className="card-title">{props.name}</h4>
