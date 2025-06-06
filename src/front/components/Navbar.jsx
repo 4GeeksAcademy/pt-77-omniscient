@@ -1,4 +1,5 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { logout } from "../Actions.js";
 import { useState, useEffect } from "react";
 import { SidebarData } from "../SidebarData";
 import "../navbar.css";
@@ -6,16 +7,24 @@ import useGlobalReducer from "../hooks/useGlobalReducer.jsx";
 
 export const Navbar = () => {
   const [sidebar, setsidbar] = useState(false);
-  const { store, fetchUserInfo } = useGlobalReducer();
+  const { store, dispatch, getUserById } = useGlobalReducer();
+  const navigate = useNavigate();
+
   const showSideBar = () => {
     setsidbar(!sidebar);
   };
 
   useEffect(() => {
-    if (store.token) {
+    if (store.access_token) {
       getUserById();
     }
-  }, [store.token]);
+  }, [store.access_token]);
+
+  const handleLogout = () => {
+  logout(dispatch); 
+  navigate("/must-login");
+};
+
   return (
     <>
       <div className="navbar navbar-expand-lg container-fluid">
@@ -23,21 +32,33 @@ export const Navbar = () => {
           <Link to="#" className="menu-bars me-3" onClick={showSideBar}>
             <i className="fa-solid fa-bars"></i>
           </Link>
-          <span className="navbar-brand mb-0 h1" style={{ fontFamily: "'Bangers', cursive", fontSize: "3rem" }}>OMNISCIENT</span>
+          <span
+            className="navbar-brand mb-0 h1"
+            style={{ fontFamily: "'Bangers', cursive", fontSize: "3rem" }}
+          >
+            OMNISCIENT
+          </span>
         </div>
         <div className="d-flex flex-grow-1 justify-content-center">
-          <div className="wrap">
-          </div>
+          <div className="wrap"></div>
         </div>
 
         <div className="d-flex">
           <div className="ml-auto">
-            <Link to="/signup" className="me-2">
-              <button className="btn btn-primary">Sign Up</button>
-            </Link>
-            <Link to="/login" className="me-2">
-              <button className="btn btn-primary">Log In</button>
-            </Link>
+            {!store.access_token ? (
+              <>
+                <Link to="/signup" className="me-2">
+                  <button className="btn btn-primary">Sign Up</button>
+                </Link>
+                <Link to="/login" className="me-2">
+                  <button className="btn btn-primary">Log In</button>
+                </Link>
+              </>
+            ) : (
+              <button className="btn btn-danger me-2" onClick={handleLogout}>
+                Log Out
+              </button>
+            )}
           </div>
         </div>
       </div>

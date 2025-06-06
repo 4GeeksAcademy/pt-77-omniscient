@@ -27,6 +27,16 @@ export const login = async (dispatch, payload) => {
   });
 };
 
+export const logout = (dispatch) => {
+  localStorage.removeItem("access_token");
+  localStorage.removeItem("user");
+  sessionStorage.removeItem("access_token"); 
+  
+  dispatch({
+    type: "logout",
+  });
+};
+
 export const getUser = async (dispatch, payload) => {
 //   // let response = await fetch(import.meta.env.VITE_BACKEND_URL + "/profile", {
 //   //   method: "Get",

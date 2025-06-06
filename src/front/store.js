@@ -52,6 +52,13 @@ export default function storeReducer(store, action = {}) {
         user: updatedUser,
       };
 
+    case "logout":
+      return {
+        ...store,
+        user: null,
+        access_token: null,
+      };
+
     default:
       console.error("Unknown action type:", action.type);
       return store;
