@@ -20,11 +20,18 @@ CLIENT_ID = "2r3wcled8ugszufen3r4r2makgitqq"
 ACCESS_TOKEN = "x3du3wpyr1fvn0jmmrtyzsq6sek9w0"
 
 
-@api.route('/retrogames', methods=['POST'])
+@api.route('/retrogames', methods=['GET', 'POST'])
 def get_vintage_games():
-    payload = request.get_json() or {}
-    limit = payload.get('limit', 20)     # default limit = 20
-    offset = payload.get('offset', 0)    # default offset = 0
+    if request.method == 'POST':
+        payload = request.get_json() or {}
+    else:
+        payload = request.args or {}
+
+    try:
+        limit = int(payload.get('limit', 20))
+        offset = int(payload.get('offset', 0))
+    except ValueError:
+        return jsonify({"error": "limit and offset must be integers"}), 400
 
     headers = {
         "Client-ID": CLIENT_ID,
@@ -58,12 +65,27 @@ def get_vintage_games():
     if response.status_code != 200:
         return jsonify({"error": "Failed to fetch games from IGDB"}), response.status_code
 
-    return jsonify(response.json()), 200
+    games = response.json()
+
+    # Manually attach YouTube trailers
+    youtube_links = {
+        "Super Mario Bros.": "https://www.youtube.com/embed/KM8Y4wqXFz4",
+        "Sonic the Hedgehog": "https://www.youtube.com/embed/CwYNFlsLTs0",
+        "The Legend of Zelda": "https://www.youtube.com/embed/cI2uKsbFj94",
+        "Pac-Man": "https://www.youtube.com/embed/teQwViKMnxk",
+        "Donkey Kong": "https://www.youtube.com/embed/1P-xP8FJj28"
+    }
+
+    for game in games:
+        name = game.get("name")
+        if name in youtube_links:
+            game["gameplay_url"] = youtube_links[name]
+        else:
+            game["gameplay_url"] = None
+
+    return jsonify(games), 200
 
 
-
-if __name__ == '__main__':
-    api.run(debug=True, port=3001)
 
 
 @api.route('/signup', methods=['POST'])
