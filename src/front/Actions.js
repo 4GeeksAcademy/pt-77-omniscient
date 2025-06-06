@@ -28,15 +28,15 @@ export const login = async (dispatch, payload) => {
 };
 
 export const getUser = async (dispatch, payload) => {
-  // let response = await fetch(import.meta.env.VITE_BACKEND_URL + "/profile", {
-  //   method: "Get",
-  //   headers: { Authorization: "Bearer " + payload },
-  // });
-  // let data = await response.json();
-  // dispatch({
-  //   type: "set_user",
-  //   payload: { user: data.user, access_token: payload },
-  // });
+//   // let response = await fetch(import.meta.env.VITE_BACKEND_URL + "/profile", {
+//   //   method: "Get",
+//   //   headers: { Authorization: "Bearer " + payload },
+//   // });
+//   // let data = await response.json();
+//   // dispatch({
+//   //   type: "set_user",
+//   //   payload: { user: data.user, access_token: payload },
+//   // });
 };
 
 export const getVintageGames = async (dispatch, payload) => {
@@ -107,8 +107,6 @@ export const getUserById = async (dispatch, payload) => {
 
   const data = await response.json();
 
-  dispatch({
-    type: "set_user",
-    payload: data,
-  });
+  dispatch({ type: "set_user", payload: { user, access_token } });
+localStorage.setItem("user", JSON.stringify(user));
 };

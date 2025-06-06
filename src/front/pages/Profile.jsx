@@ -12,11 +12,19 @@ export const Profile = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [successMsg, setSuccessMsg] = useState("");
 
+
   useEffect(() => {
     if (theId) {
       getUserById(theId);
     }
   }, [theId]);
+
+ useEffect(() => {
+  if (theId && !store.user) {
+    getUserById(theId);
+  }
+}, [theId, store.user]);
+
 
   useEffect(() => {
     if (store.user?.about !== undefined) {
@@ -36,7 +44,11 @@ export const Profile = () => {
   }, [store.user, store.access_token]);
 
   const handleSave = async () => {
+
     const token = sessionStorage.getItem("access_token");
+
+    const token = localStorage.getItem("access_token");
+
     try {
       const response = await fetch(
         `${import.meta.env.VITE_BACKEND_URL}/profile`,
@@ -66,7 +78,11 @@ export const Profile = () => {
   };
 
   const handleDeleteAbout = async () => {
+
   const token = sessionStorage.getItem("access_token");
+
+  const token = localStorage.getItem("access_token");
+
 
   try {
     const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/profile`, {
@@ -75,15 +91,26 @@ export const Profile = () => {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
+
       body: JSON.stringify({ about: "" }), // Send empty string
+
+      body: JSON.stringify({ about: "" }), 
+
     });
 
     const data = await response.json();
     if (response.ok) {
+
       dispatch({ type: "update_about", payload: "" }); // Clear from store
       setAbout(""); // Clear from local state
       setSuccessMsg("About section deleted.");
       setIsEditing(false); // Exit editing mode
+
+      dispatch({ type: "update_about", payload: "" }); 
+      setAbout(""); 
+      setSuccessMsg("About section deleted.");
+      setIsEditing(false); 
+
     } else {
       setSuccessMsg(`Error: ${data.error || "Something went wrong"}`);
     }
