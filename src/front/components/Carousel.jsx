@@ -1,5 +1,6 @@
 import React from "react";
 import useGlobalReducer from "../hooks/useGlobalReducer.jsx";
+import { Link } from "react-router-dom";
 
 export const Carousel = ({ games }) => {
   if (!games || games.length === 0) {
@@ -41,22 +42,28 @@ export const Carousel = ({ games }) => {
               className={`carousel-item ${index === 0 ? "active" : ""}`}
             >
               <div className="d-flex justify-content-center">
-                <img
-                  src={
-                    game.img?.startsWith("//")
-                      ? `https:${game.img.replace("t_thumb", "t_720p")}`
-                      : game.img?.replace("t_thumb", "t_720p")
-                  }
-                  alt={game.name || "Game Image"}
-                  onError={(e) => (e.target.src = "/fallback.jpg")}
-                  className="d-block"
-                  style={{
-                    maxHeight: "18rem",
-                    width: "50%",
-                    // maxWidth: "600px",
-                    objectFit: "contain",
-                  }}
-                />
+                <Link
+                  to={`/retrogame/${game.uid || index}`}
+                  className="text-decoration-none"
+                >
+                  <img
+                    src={
+                      game.img?.startsWith("//")
+                        ? `https:${game.img.replace("t_thumb", "t_720p")}`
+                        : game.img?.replace("t_thumb", "t_720p")
+                    }
+                    alt={game.name || "Game Image"}
+                    onError={(e) => (e.target.src = "/fallback.jpg")}
+                    className="d-block"
+                    style={{
+                     maxHeight: "400px",
+                      maxWidth: "100%",
+                      width: "auto",
+                      height: "auto",
+                      objectFit: "contain",
+                    }}
+                  />
+                </Link>
 
                 <div className="carousel-caption d-none d-md-block bg-dark bg-opacity-50 rounded p-2">
                   <h5>{game.name}</h5>

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import useGlobalReducer from "../hooks/useGlobalReducer.jsx";
 import { GameCard } from "../components/GameCard.jsx";
 import projectimage1 from "../assets/img/projectimage1.png";
-import { Link } from "react-router-dom";
+// import { Link } from "react-router-dom";
 
 export const RetroGames = () => {
   const { store, dispatch, getVintageGames } = useGlobalReducer();
@@ -82,10 +82,10 @@ export const RetroGames = () => {
               key={vintageGames.uid}
               className="col-6 col-md-4 col-lg-3 mb-4"
             >
-              <Link
+              {/* <Link
                 to={`/retrogame/${vintageGames.id}`}
                 style={{ textDecoration: "none", color: "inherit" }}
-              >
+              > */}
                 <GameCard
                   type={"vintageGames"}
                   name={vintageGames.name}
@@ -93,7 +93,7 @@ export const RetroGames = () => {
                   img={vintageGames.cover?.url || ""}
                   summary={vintageGames.summary}
                 />
-              </Link>
+              {/* </Link> */}
             </div>
           ))
         ) : (
