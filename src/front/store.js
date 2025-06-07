@@ -9,6 +9,7 @@ export const initialStore = () => {
     vintageGames: [],
     rawgGames: [],
     save_for_later: [],
+    gameReactions: {},
   };
 };
 
@@ -51,6 +52,23 @@ export default function storeReducer(store, action = {}) {
         ...store,
         user: updatedUser,
       };
+
+      case "like_game":
+  return {
+    ...store,
+    gameReactions: {
+      ...state.gameReactions,
+      [action.payload.uid]: { liked: true, disliked: false },
+    },
+  };
+case "dislike_game":
+  return {
+    ...store,
+    gameReactions: {
+      ...state.gameReactions,
+      [action.payload.uid]: { liked: false, disliked: true },
+    },
+  };
 
     default:
       console.error("Unknown action type:", action.type);

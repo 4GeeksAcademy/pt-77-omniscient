@@ -45,8 +45,6 @@ export const Profile = () => {
 
   const handleSave = async () => {
 
-    const token = sessionStorage.getItem("access_token");
-
     const token = localStorage.getItem("access_token");
 
     try {
@@ -79,7 +77,7 @@ export const Profile = () => {
 
   const handleDeleteAbout = async () => {
 
-  const token = sessionStorage.getItem("access_token");
+  
 
   const token = localStorage.getItem("access_token");
 
