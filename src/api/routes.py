@@ -190,19 +190,24 @@ def save_game():
 
     return jsonify({"message": "Game saved", "saved_games": user.saved_games}), 200
 
-@app.route('/delete-saved-game', methods=['DELETE'])
+@api.route("/api/delete-saved-game", methods=["DELETE"])
 @jwt_required()
 def delete_saved_game():
-    user_id = get_jwt_identity()
-    user = User.query.get(user_id)
-    if not user:
-        return jsonify({"error": "User not found"}), 404
-
     data = request.get_json()
     game_id = data.get("game_id")
+    user_id = get_jwt_identity()
 
-    # Remove game with matching ID
-    user.saved_games = [g for g in user.saved_games if g.get("id") != game_id]
+    print(f"User ID: {user_id}, Game ID: {game_id}")  
 
+    if not game_id:
+        return jsonify({"error": "Missing game_id"}), 400
+
+    game = SavedGame.query.filter_by(uid=game_id, user_id=user_id).first()
+
+    if not game:
+        return jsonify({"error": "Game not found"}), 404
+
+    db.session.delete(game)
     db.session.commit()
-    return jsonify({"message": "Game deleted successfully"}), 200
+
+    return jsonify({"message": "Game deleted"}), 200

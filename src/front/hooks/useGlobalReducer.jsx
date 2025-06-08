@@ -20,7 +20,7 @@ export function StoreProvider({ children }) {
         getVintageGames: (payload) => getVintageGames(dispatch, payload),
         getRawgGames: (payload) => getRawgGames(dispatch, payload),
         getGameDescription: (payload) => getGameDescription(dispatch, payload),
-        getUserById: (payload) => getUserById(dispatch, payload)
+        getUserById: (payload) => getUserById(dispatch, payload),
     }
     return <StoreContext.Provider value={{ store, dispatch, ...actions }}>
         {children}

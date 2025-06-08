@@ -101,7 +101,7 @@ export const Profile = () => {
     );
 
     const data = await response.json();
-    if (response.ok) {
+    if (response.ok) { 
       dispatch({
         type: "set_saved_games",
         payload: store.save_for_later.filter((game) => game.id !== gameId),
@@ -167,11 +167,11 @@ export const Profile = () => {
             alt="..."
           ></img>
           <h1 className="username text-xl font-bold">{message}</h1>
-          <p className="about-user">
+          <div className="about-user">
             <h2>
               <strong>About</strong>
             </h2>
-          </p>
+          </div>
           {isEditing ? (
             <div>
               <textarea
