@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef, useCallback } from "react";
 import useGlobalReducer from "../hooks/useGlobalReducer.jsx";
 import { RawgGameCard } from "../components/RawgGameCard.jsx";
 import projectimage1 from "../assets/img/projectimage1.png";
-import { Link } from "react-router-dom";
+
 
 export const Games = () => {
   const { store } = useGlobalReducer();
@@ -130,7 +130,7 @@ export const Games = () => {
 
   return (
     <div
-      className="text-center container-fluid"
+      className="text-center container-fluid px-3 px-md-5"
       style={{
         position: "relative",
         backgroundImage: `url(${projectimage1})`,
@@ -202,18 +202,13 @@ export const Games = () => {
               className="col-6 col-md-4 col-lg-3 mb-4"
               ref={isLast ? lastGameRef : null}
             >
-              <Link
-                to={`/game/${rawgGame.slug}`}
-                style={{ textDecoration: "none", color: "inherit" }}
-              >
-                <RawgGameCard
-                  img={rawgGame.background_image}
-                  name={rawgGame.name}
-                  released={rawgGame.released}
-                  rating={rawgGame.rating}
-                  description={rawgGame.description}
-                />
-              </Link>
+         
+              <RawgGameCard
+                name={rawgGame.name}
+                slug={rawgGame.slug}
+                img={rawgGame.background_image}
+              />
+              
             </div>
           );
         })}

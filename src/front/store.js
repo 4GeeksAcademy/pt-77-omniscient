@@ -4,11 +4,12 @@ export const initialStore = () => {
 
   return {
     message: null,
-    user: user || null,
+    user: access_token && user ? user : null,
     access_token: access_token || null,
     vintageGames: [],
     rawgGames: [],
     save_for_later: [],
+    gameReactions: {},
   };
 };
 
@@ -22,8 +23,8 @@ export default function storeReducer(store, action = {}) {
 
       return {
         ...store,
-        user,
-        access_token,
+        user: action.payload.user,
+        access_token: action.payload.access_token,
       };
 
     case "add_vintageGames":
@@ -53,12 +54,15 @@ export default function storeReducer(store, action = {}) {
       };
 
     case "logout":
+      localStorage.removeItem("access_token");
+      localStorage.removeItem("user");
+      sessionStorage.removeItem("access_token");
+
       return {
         ...store,
         user: null,
         access_token: null,
       };
-
     default:
       console.error("Unknown action type:", action.type);
       return store;

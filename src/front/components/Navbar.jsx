@@ -7,6 +7,7 @@ import useGlobalReducer from "../hooks/useGlobalReducer.jsx";
 
 export const Navbar = () => {
   const [sidebar, setsidbar] = useState(false);
+
   const { store, dispatch, getUserById } = useGlobalReducer();
   const navigate = useNavigate();
 
@@ -14,52 +15,52 @@ export const Navbar = () => {
     setsidbar(!sidebar);
   };
 
-  useEffect(() => {
-    if (store.access_token) {
-      getUserById();
-    }
-  }, [store.access_token]);
-
-  const handleLogout = () => {
-  logout(dispatch); 
-  navigate("/must-login");
-};
-
-  return (
+ useEffect(() => {
+  if (store.access_token && !store.user) {
+    getUserById();
+  }
+}, [store.access_token]);
+ 
+return (
     <>
-      <div className="navbar navbar-expand-lg container-fluid">
+      <div className="navbar navbar-expand-lg container-fluid d-flex align-items-center px-3">
         <div className="d-flex align-items-center">
           <Link to="#" className="menu-bars me-3" onClick={showSideBar}>
             <i className="fa-solid fa-bars"></i>
           </Link>
           <span
-            className="navbar-brand mb-0 h1"
-            style={{ fontFamily: "'Bangers', cursive", fontSize: "3rem" }}
+            className="navbar-brand mb-0"
+            style={{
+              fontFamily: "'Bangers', cursive",
+              fontSize: "clamp(1.5rem, 4vw, 3rem)",
+              color: "black",
+            }}
           >
             OMNISCIENT
           </span>
         </div>
-        <div className="d-flex flex-grow-1 justify-content-center">
-          <div className="wrap"></div>
-        </div>
-
-        <div className="d-flex">
-          <div className="ml-auto">
-            {!store.access_token ? (
-              <>
-                <Link to="/signup" className="me-2">
-                  <button className="btn btn-primary">Sign Up</button>
-                </Link>
-                <Link to="/login" className="me-2">
-                  <button className="btn btn-primary">Log In</button>
-                </Link>
-              </>
-            ) : (
-              <button className="btn btn-danger me-2" onClick={handleLogout}>
-                Log Out
-              </button>
-            )}
-          </div>
+        <div className="flex-grow-1"></div>
+        <div className="d-flex flex-wrap align-items-center">
+          {!store.user ? (
+            <>
+              <Link to="/signup" className="me-2 mb-2 mb-lg-0">
+                <button className="btn btn-primary">Sign Up</button>
+              </Link>
+              <Link to="/login" className="me-2 mb-2 mb-lg-0">
+                <button className="btn btn-primary">Log In</button>
+              </Link>
+            </>
+          ) : (
+            <button
+              className="btn btn-danger me-2 mb-2 mb-lg-0"
+              onClick={() => {
+                dispatch({ type: "logout" });
+                navigate("/must-login");
+              }}
+            >
+              Logout
+            </button>
+          )}
         </div>
       </div>
 
@@ -70,18 +71,17 @@ export const Navbar = () => {
               <i className="fa-solid fa-xmark"></i>
             </Link>
           </li>
-          {SidebarData.map((item, index) => {
-            return (
-              <li key={index} className={item.cName}>
-                <Link to={item.path}>
-                  <i className={item.icon}></i>
-                  <span>{item.title}</span>
-                </Link>
-              </li>
-            );
-          })}
+          {SidebarData.map((item, index) => (
+            <li key={index} className={item.cName}>
+              <Link to={item.path}>
+                <i className={item.icon}></i>
+                <span>{item.title}</span>
+              </Link>
+            </li>
+          ))}
         </ul>
       </nav>
+
       {sidebar && <div className="overlay" onClick={showSideBar}></div>}
     </>
   );

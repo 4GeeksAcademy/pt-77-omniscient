@@ -16,8 +16,8 @@ import { Checkout } from "./pages/Checkout";
 import { Login } from "./pages/Login";
 import { Signup } from "./pages/Signup";
 import { GameDetails } from "./pages/GamesDetail";
-import { MustLogin } from "./pages/MustLogin";
 import { Profile } from "./pages/Profile";
+import { MustLogin } from "./pages/MustLogin";
 import { RetroGameDetails } from "./pages/RetroGameDetail";
 
 

@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 export const RawgGameCarousel = ({ games }) => {
   if (!games || games.length === 0) return <p>No games to show.</p>;
@@ -40,22 +41,25 @@ export const RawgGameCarousel = ({ games }) => {
               className={`carousel-item ${index === 0 ? "active" : ""}`}
             >
               <div className="d-flex justify-content-center">
-                <img
-                  src={
-                    game?.img?.startsWith("//")
-                      ? `https:${game.img}`
-                      : game.img || "/fallback.jpg"
-                  }
-                  alt={game.name || "Game image"}
-                  onError={(e) => (e.target.src = "/fallback.jpg")}
-                  className="d-block"
-                  style={{
-                    maxHeight: "18rem",
-                    width: "50%",
-                    // maxWidth: "600px",
-                    objectFit: "contain",
-                  }}
-                />
+                <Link to={`/game/${game.slug || game.uid || index}`} className="text-decoration-none">
+                  <img
+                    src={
+                      game?.img?.startsWith("//")
+                        ? `https:${game.img}`
+                        : game.img || "/fallback.jpg"
+                    }
+                    alt={game.name || "Game image"}
+                    onError={(e) => (e.target.src = "/fallback.jpg")}
+                    className="d-block"
+                    style={{
+                     maxHeight: "400px",
+                      maxWidth: "100%",
+                      width: "auto",
+                      height: "auto",
+                      objectFit: "contain",
+                    }}
+                  />
+                </Link>
               </div>
               <div className="carousel-caption d-none d-md-block bg-dark bg-opacity-50 rounded p-2">
                 <h5>{game.name || "Unnamed Game"}</h5>

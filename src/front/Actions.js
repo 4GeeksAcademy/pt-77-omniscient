@@ -50,15 +50,18 @@ export const getUser = async (dispatch, payload) => {
 };
 
 export const getVintageGames = async (dispatch, payload) => {
+  // Use the passed payload for limit and offset instead of hardcoding
+  const { limit = 500, offset = 0 } = payload || {};
+
   let response = await fetch(import.meta.env.VITE_BACKEND_URL + "/retrogames", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
-   body: JSON.stringify({
-    limit: 500,
-    offset: 0
-  })
+    body: JSON.stringify({
+      limit,
+      offset,
+    }),
   });
 
   let data = await response.json();
@@ -67,7 +70,10 @@ export const getVintageGames = async (dispatch, payload) => {
     type: "add_vintageGames",
     payload: data,
   });
+
+  return data; // Return the data so caller can use it
 };
+
 
 export const getRawgGames = async (dispatch, payload) => {
   let response = await fetch(
@@ -100,17 +106,28 @@ export const getGameDescription = async (slug) => {
   };
 };
 
-export const getUserById = async (dispatch, payload) => {
-  const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/user`, {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${sessionStorage.getItem("access_token")}`,
-    },
-  });
+export const getUserById = async (dispatch) => {
+  try {
+    const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/user`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+      },
+    });
 
-  const data = await response.json();
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
 
-  dispatch({ type: "set_user", payload: { user, access_token } });
-localStorage.setItem("user", JSON.stringify(user));
+    const data = await response.json();
+
+    const user = data.user;
+    const access_token = data.access_token;
+
+    dispatch({ type: "set_user", payload: { user, access_token } });
+    localStorage.setItem("user", JSON.stringify(user));
+  } catch (error) {
+    console.error("Failed to fetch user by ID:", error);
+  }
 };

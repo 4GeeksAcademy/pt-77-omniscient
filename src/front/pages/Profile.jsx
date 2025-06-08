@@ -24,7 +24,7 @@ export const Profile = () => {
     }
   }, [store.user?.about]);
 
-  useEffect(() => {
+useEffect(() => {
     console.log("Checking auth", store.access_token, store.user);
     if (!store.access_token || !store.user) {
       console.log("Redirecting to /must-login");
@@ -36,7 +36,9 @@ export const Profile = () => {
   }, [store.user, store.access_token]);
 
   const handleSave = async () => {
+
     const token = localStorage.getItem("access_token");
+
     try {
       const response = await fetch(
         `${import.meta.env.VITE_BACKEND_URL}/profile`,
@@ -66,9 +68,9 @@ export const Profile = () => {
   };
 
   const handleDeleteAbout = async () => {
+    
     const token = localStorage.getItem("access_token");
-
-    try {
+  try {
       const response = await fetch(
         `${import.meta.env.VITE_BACKEND_URL}/profile`,
         {

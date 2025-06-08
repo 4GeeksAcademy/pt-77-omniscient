@@ -1,24 +1,35 @@
-import React, { useContext } from "react";
+import React, { useState, useEffect } from "react";
 import useGlobalReducer from "../hooks/useGlobalReducer.jsx";
-import { CartContext } from "./CartContext.jsx";
-import { CartProvider } from "react-use-cart";
+import { Link } from "react-router-dom";
 
 export const GameCard = (props) => {
   const { store, dispatch } = useGlobalReducer();
-  // const { addToCart } = useContext(CartContext);
 
-  // const handleAddToCart = () => {
-  //   const item = {
-  //     id: props.id,
-  //     name: props.name,
-  //     price: props.price,
-  //     img: props.img,
-  //   };
-  //   addToCart(item)
-  // };
+  // Use localStorage keys unique per game UID to persist likes/dislikes
+  const likesKey = `likes_${props.uid}`;
+  const dislikesKey = `dislikes_${props.uid}`;
+
+  const [likes, setLikes] = useState(() => {
+    // Load from localStorage or start at 0
+    return Number(localStorage.getItem(likesKey)) || 0;
+  });
+
+  const [dislikes, setDislikes] = useState(() => {
+    return Number(localStorage.getItem(dislikesKey)) || 0;
+  });
+
+  // Whenever likes change, save to localStorage
+  useEffect(() => {
+    localStorage.setItem(likesKey, likes);
+  }, [likes, likesKey]);
+
+  // Whenever dislikes change, save to localStorage
+  useEffect(() => {
+    localStorage.setItem(dislikesKey, dislikes);
+  }, [dislikes, dislikesKey]);
 
   const handleSaveForLater = () => {
-    console.log("Saving for later:", handleSaveForLater);
+    console.log("Saving for later:", props.name);
     dispatch({
       type: "save_for_later",
       payload: {
@@ -45,24 +56,45 @@ export const GameCard = (props) => {
       }}
     >
       <div className="card-body">
-        <img
-          src={`https:${props.img.replace('t_thumb', 't_cover_big')}`}
-          className="card-img-top"
-          alt="gameImage"
-          style={{
-            maxHeight: "300px",
-            objectFit: "contain",
-            imageRendering: "auto",
-            borderRadius: ".5rem",
-            
-          }}
-        />
-        <h4 className="card-title">{props.name}</h4>
-        <h5 className="retroBio">{props.summary}</h5>
+        <Link
+          to={`/retrogame/${props.uid}`}
+          style={{ textDecoration: "none", color: "inherit" }}
+        >
+          <img
+            src={`https:${props.img.replace("t_thumb", "t_cover_big")}`}
+            className="card-img-top"
+            alt="gameImage"
+            style={{
+              maxHeight: "300px",
+              objectFit: "contain",
+              imageRendering: "auto",
+              borderRadius: ".5rem",
+            }}
+          />
+        </Link>
+        <h4 className="card-title mt-2">{props.name}</h4>
 
-        <button className="btn btn-primary" onClick={handleSaveForLater}>
-          Save for Later
-        </button>
+        <div className="d-flex justify-content-center gap-2 mt-2">
+          <button
+            className="btn btn-outline-success"
+            onClick={() => setLikes((prev) => prev + 1)}
+          >
+            👍 {likes}
+          </button>
+          <button
+            className="btn btn-outline-danger"
+            onClick={() => setDislikes((prev) => prev + 1)}
+          >
+            👎 {dislikes}
+          </button>
+          <button
+            className="btn btn-primary"
+            onClick={handleSaveForLater}
+            title="Save for later"
+          >
+            <i className="fa-solid fa-bookmark me-1"></i> Save
+          </button>
+        </div>
       </div>
     </div>
   );
