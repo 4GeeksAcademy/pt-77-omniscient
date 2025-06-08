@@ -85,34 +85,34 @@ export const Profile = () => {
   };
 
   const handleDeleteGame = async (gameId) => {
-  const token = localStorage.getItem("access_token");
+    const token = localStorage.getItem("access_token");
 
-  try {
-    const response = await fetch(
-      `${import.meta.env.VITE_BACKEND_URL}/delete-saved-game`,
-      {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({ game_id: gameId }),
+    try {
+      const response = await fetch(
+        `${import.meta.env.VITE_BACKEND_URL}/delete-saved-game`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ game_id: gameId }),
+        }
+      );
+
+      const data = await response.json();
+      if (response.ok) {
+        dispatch({
+          type: "set_saved_games",
+          payload: store.save_for_later.filter((game) => game.id !== gameId),
+        });
+      } else {
+        console.error("Delete failed:", data.error || "Something went wrong");
       }
-    );
-
-    const data = await response.json();
-    if (response.ok) { 
-      dispatch({
-        type: "set_saved_games",
-        payload: store.save_for_later.filter((game) => game.id !== gameId),
-      });
-    } else {
-      console.error("Delete failed:", data.error || "Something went wrong");
+    } catch (err) {
+      console.error("Error deleting game:", err);
     }
-  } catch (err) {
-    console.error("Error deleting game:", err);
-  }
-};
+  };
 
   const handleDeleteAbout = async () => {
     const token = localStorage.getItem("access_token");
@@ -214,18 +214,27 @@ export const Profile = () => {
         style={{ maxHeight: "500px" }}
       >
         <h2 className="text-2xl font-bold mb-4">Saved Games</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 px-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 px-4">
           {store.save_for_later && store.save_for_later.length > 0 ? (
             store.save_for_later.map((game, index) => (
               <div
                 key={index}
-                className="bg-white bg-opacity-10 p-4 rounded-xl shadow-md text-white"
-                style={{ backdropFilter: "blur(6px)" }}
+                className="bg-white bg-opacity-10 p-3 rounded-2xl shadow-md text-white flex flex-col"
+                style={{
+                  minWidth: "18rem",
+                  border: "1px solid rgba(10, 10, 10, 0.2)",
+                  borderRadius: "1rem",
+                  background: "rgba(255, 255, 255, 0.1)",
+                  boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",
+                  backdropFilter: "blur(10px)",
+                  WebkitBackdropFilter: "blur(10px)",
+                  color: "white",
+                }}
               >
                 <img
                   src={`https:${game.img.replace("t_thumb", "t_cover_big")}`}
                   alt={game.name}
-                  className="w-full max-h-40 object-contain rounded-lg mb-2"
+                  className="w-full max-h-28 object-cover rounded-xl mb-2"
                 />
                 <h3 className="text-lg font-semibold">{game.name}</h3>
                 <p className="text-sm">{game.summary}</p>
