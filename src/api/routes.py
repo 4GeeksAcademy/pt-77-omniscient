@@ -10,9 +10,10 @@ import hashlib
 import requests
 
 
+
 api = Blueprint('api', __name__)
 
-# Allow CORS requests to this API
+
 CORS(api)
 
 
@@ -155,3 +156,53 @@ def update_about():
     db.session.commit()
 
     return jsonify({"message": "Profile updated", "user": user.serialize()}), 200
+
+@api.route('/saved-games', methods=['GET'])
+@jwt_required()
+def get_saved_games():
+    user_email = get_jwt_identity()
+    user = User.query.filter_by(email=user_email).first()
+    if not user:
+        return jsonify({"error": "User not found"}), 404
+
+    return jsonify(user.saved_games), 200
+
+
+@api.route('/saved-games', methods=['PUT'])
+@jwt_required()
+def save_game():
+    user_email = get_jwt_identity()
+    user = User.query.filter_by(email=user_email).first()
+    if not user:
+        return jsonify({"error": "User not found"}), 404
+
+    data = request.get_json()
+
+    if not data:
+        return jsonify({"error": "No game data provided"}), 400
+
+    # Prevent duplicate entries by checking name or id
+    if any(game['name'] == data['name'] for game in user.saved_games):
+        return jsonify({"message": "Game already saved"}), 200
+
+    user.saved_games.append(data)
+    db.session.commit()
+
+    return jsonify({"message": "Game saved", "saved_games": user.saved_games}), 200
+
+@app.route('/delete-saved-game', methods=['DELETE'])
+@jwt_required()
+def delete_saved_game():
+    user_id = get_jwt_identity()
+    user = User.query.get(user_id)
+    if not user:
+        return jsonify({"error": "User not found"}), 404
+
+    data = request.get_json()
+    game_id = data.get("game_id")
+
+    # Remove game with matching ID
+    user.saved_games = [g for g in user.saved_games if g.get("id") != game_id]
+
+    db.session.commit()
+    return jsonify({"message": "Game deleted successfully"}), 200

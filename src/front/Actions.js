@@ -131,3 +131,20 @@ export const getUserById = async (dispatch) => {
     console.error("Failed to fetch user by ID:", error);
   }
 };
+
+const getSavedGames = async (userId) => {
+  const token = localStorage.getItem("access_token");
+  try {
+    const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/saved-games/${userId}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    const data = await res.json();
+    if (res.ok) {
+      dispatch({ type: "set_saved_games", payload: data });
+    }
+  } catch (err) {
+    console.error("Failed to fetch saved games", err);
+  }
+};

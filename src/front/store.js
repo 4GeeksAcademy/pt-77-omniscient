@@ -63,6 +63,13 @@ export default function storeReducer(store, action = {}) {
         user: null,
         access_token: null,
       };
+
+    case "set_saved_games":
+      return {
+        ...store,
+        save_for_later: action.payload,
+      };
+
     default:
       console.error("Unknown action type:", action.type);
       return store;

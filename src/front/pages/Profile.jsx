@@ -24,7 +24,13 @@ export const Profile = () => {
     }
   }, [store.user?.about]);
 
-useEffect(() => {
+  useEffect(() => {
+    if (store.user && store.user.id) {
+      getSavedGames(store.user.id);
+    }
+  }, [store.user]);
+
+  useEffect(() => {
     console.log("Checking auth", store.access_token, store.user);
     if (!store.access_token || !store.user) {
       console.log("Redirecting to /must-login");
@@ -36,7 +42,6 @@ useEffect(() => {
   }, [store.user, store.access_token]);
 
   const handleSave = async () => {
-
     const token = localStorage.getItem("access_token");
 
     try {
@@ -67,10 +72,51 @@ useEffect(() => {
     }
   };
 
-  const handleDeleteAbout = async () => {
-    
-    const token = localStorage.getItem("access_token");
+  const getSavedGames = async (userId) => {
+    try {
+      const response = await fetch(
+        `${import.meta.env.VITE_BACKEND_URL}/saved-games/${userId}`
+      );
+      const data = await response.json();
+      dispatch({ type: "set_saved_games", payload: data });
+    } catch (error) {
+      console.error("Failed to fetch saved games", error);
+    }
+  };
+
+  const handleDeleteGame = async (gameId) => {
+  const token = localStorage.getItem("access_token");
+
   try {
+    const response = await fetch(
+      `${import.meta.env.VITE_BACKEND_URL}/delete-saved-game`,
+      {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ game_id: gameId }),
+      }
+    );
+
+    const data = await response.json();
+    if (response.ok) {
+      dispatch({
+        type: "set_saved_games",
+        payload: store.save_for_later.filter((game) => game.id !== gameId),
+      });
+    } else {
+      console.error("Delete failed:", data.error || "Something went wrong");
+    }
+  } catch (err) {
+    console.error("Error deleting game:", err);
+  }
+};
+
+  const handleDeleteAbout = async () => {
+    const token = localStorage.getItem("access_token");
+    try {
       const response = await fetch(
         `${import.meta.env.VITE_BACKEND_URL}/profile`,
         {
@@ -163,13 +209,14 @@ useEffect(() => {
           )}
         </div>
       </div>
-      <div className="saved-games-card text-white text-center mt-10">
-        <h2>
-          <strong>Saved Games</strong>
-        </h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mt-4 px-4 w-full max-w-6xl">
-          {store.savedGames && store.savedGames.length > 0 ? (
-            store.savedGames.map((game, index) => (
+      <div
+        className="saved-games-card text-white text-center mt-10 bg-[#4A007D] rounded-2xl p-6 shadow-lg w-11/12 max-w-6xl overflow-y-auto"
+        style={{ maxHeight: "500px" }}
+      >
+        <h2 className="text-2xl font-bold mb-4">Saved Games</h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 px-4">
+          {store.save_for_later && store.save_for_later.length > 0 ? (
+            store.save_for_later.map((game, index) => (
               <div
                 key={index}
                 className="bg-white bg-opacity-10 p-4 rounded-xl shadow-md text-white"
@@ -178,10 +225,16 @@ useEffect(() => {
                 <img
                   src={`https:${game.img.replace("t_thumb", "t_cover_big")}`}
                   alt={game.name}
-                  className="w-full h-48 object-contain rounded-lg mb-2"
+                  className="w-full max-h-40 object-contain rounded-lg mb-2"
                 />
                 <h3 className="text-lg font-semibold">{game.name}</h3>
                 <p className="text-sm">{game.summary}</p>
+                <button
+                  onClick={() => handleDeleteGame(game.id)}
+                  className="mt-2 bg-red-500 text-black px-3 py-1 rounded font-bold"
+                >
+                  Delete Game
+                </button>
               </div>
             ))
           ) : (
