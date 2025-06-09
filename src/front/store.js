@@ -4,7 +4,7 @@ export const initialStore = () => {
 
   return {
     message: null,
-    user: access_token && user ? user : null,
+    user: access_token ? user : null,
     access_token: access_token || null,
     vintageGames: [],
     rawgGames: [],
@@ -17,7 +17,6 @@ export default function storeReducer(store, action = {}) {
   switch (action.type) {
     case "set_user":
       const { user, access_token } = action.payload;
-      sessionStorage.setItem("access_token", access_token);
       localStorage.setItem("access_token", access_token);
       localStorage.setItem("user", JSON.stringify(user));
 

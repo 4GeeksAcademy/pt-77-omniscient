@@ -3,7 +3,6 @@ import useGlobalReducer from "../hooks/useGlobalReducer.jsx";
 import { RawgGameCard } from "../components/RawgGameCard.jsx";
 import projectimage1 from "../assets/img/projectimage1.png";
 
-
 export const Games = () => {
   const { store } = useGlobalReducer();
   const [games, setGames] = useState([]);
@@ -202,13 +201,12 @@ export const Games = () => {
               className="col-6 col-md-4 col-lg-3 mb-4"
               ref={isLast ? lastGameRef : null}
             >
-         
               <RawgGameCard
                 name={rawgGame.name}
                 slug={rawgGame.slug}
                 img={rawgGame.background_image}
+                uid={rawgGame.id}
               />
-              
             </div>
           );
         })}

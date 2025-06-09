@@ -6,7 +6,7 @@ import useGlobalReducer from "../hooks/useGlobalReducer.jsx";
 export const Profile = () => {
   const navigate = useNavigate();
   const { theId } = useParams();
-  const { store, dispatch, getUserById } = useGlobalReducer();
+  const { store, dispatch, getUserById, getSavedGames,removeSavedGame} = useGlobalReducer();
   const [message, setMessage] = useState("");
   const [about, setAbout] = useState("");
   const [isEditing, setIsEditing] = useState(false);
@@ -31,7 +31,7 @@ export const Profile = () => {
   }, [store.user]);
 
   useEffect(() => {
-    console.log("Checking auth", store.access_token, store.user);
+    // console.log("Checking auth", store.access_token, store.user);
     if (!store.access_token || !store.user) {
       console.log("Redirecting to /must-login");
       navigate("/must-login");
@@ -72,46 +72,8 @@ export const Profile = () => {
     }
   };
 
-  const getSavedGames = async (userId) => {
-    try {
-      const response = await fetch(
-        `${import.meta.env.VITE_BACKEND_URL}/saved-games/${userId}`
-      );
-      const data = await response.json();
-      dispatch({ type: "set_saved_games", payload: data });
-    } catch (error) {
-      console.error("Failed to fetch saved games", error);
-    }
-  };
-
   const handleDeleteGame = async (gameId) => {
-    const token = localStorage.getItem("access_token");
-
-    try {
-      const response = await fetch(
-        `${import.meta.env.VITE_BACKEND_URL}/delete-saved-game`,
-        {
-          method: "DELETE",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({ game_id: gameId }),
-        }
-      );
-
-      const data = await response.json();
-      if (response.ok) {
-        dispatch({
-          type: "set_saved_games",
-          payload: store.save_for_later.filter((game) => game.id !== gameId),
-        });
-      } else {
-        console.error("Delete failed:", data.error || "Something went wrong");
-      }
-    } catch (err) {
-      console.error("Error deleting game:", err);
-    }
+    removeSavedGame(gameId)
   };
 
   const handleDeleteAbout = async () => {
