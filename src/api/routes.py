@@ -175,21 +175,36 @@ def save_game():
     user = User.query.filter_by(email=user_email).first()
     if not user:
         return jsonify({"error": "User not found"}), 404
-
     data = request.get_json()
-
     if not data:
         return jsonify({"error": "No game data provided"}), 400
-
+    # Initialize saved_games if it's None
+    if user.saved_games is None:
+        user.saved_games = []
+    # Create a copy to work with (SQLAlchemy JSON columns need special handling)
+    saved_games = user.saved_games.copy() if user.saved_games else []
     # Prevent duplicate entries by checking name or id
-    if any(game['name'] == data['name'] for game in user.saved_games):
-        return jsonify({"message": "Game already saved"}), 200
-
-    user.saved_games.append(data)
-    db.session.commit()
-
-    return jsonify({"message": "Game saved", "saved_games": user.saved_games}), 200
-
+    game_exists = any(
+        game.get('name') == data.get('name') or
+        game.get('id') == data.get('id')
+        for game in saved_games
+    )
+    if game_exists:
+        return jsonify({"message": "Game already saved", "saved_games": saved_games}), 200
+    # Add the new game
+    saved_games.append(data)
+    user.saved_games = saved_games
+    # Mark the column as modified for SQLAlchemy to detect the change
+    from sqlalchemy.orm.attributes import flag_modified
+    flag_modified(user, 'saved_games')
+    try:
+        db.session.commit()
+        return jsonify({"message": "Game saved", "saved_games": user.saved_games}), 200
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({"error": f"Failed to save game: {str(e)}"}), 500
+    
+    
 @api.route("/api/delete-saved-game", methods=["DELETE"])
 @jwt_required()
 def delete_saved_game():

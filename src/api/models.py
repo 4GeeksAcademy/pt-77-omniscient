@@ -22,3 +22,6 @@ class User(db.Model):
             "about": self.about,
             "saved_games": self.saved_games or []
         }
+    
+
+

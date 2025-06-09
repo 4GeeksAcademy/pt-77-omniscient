@@ -132,19 +132,32 @@ export const getUserById = async (dispatch) => {
   }
 };
 
-const getSavedGames = async (userId) => {
-  const token = localStorage.getItem("access_token");
-  try {
-    const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/saved-games/${userId}`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    const data = await res.json();
-    if (res.ok) {
-      dispatch({ type: "set_saved_games", payload: data });
+export const saveGameForLater = async (dispatch, payload) => {
+    try {
+        const token = localStorage.getItem("access_token");
+        const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/saved-games`, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`
+            },
+            body: JSON.stringify(payload)
+        });
+        if (response.ok) {
+            const data = await response.json();
+            dispatch({
+                type: "set_saved_games",
+                payload: data.saved_games
+            });
+            return { success: true, message: "Game saved successfully!" };
+        } else {
+            const errorData = await response.json();
+            console.error("Error saving game:", errorData);
+            return { success: false, message: errorData.message || "Failed to save game" };
+        }
+    } catch (error) {
+        console.error("Network error:", error);
+        return { success: false, message: "Network error occurred" };
     }
-  } catch (err) {
-    console.error("Failed to fetch saved games", err);
-  }
 };
+

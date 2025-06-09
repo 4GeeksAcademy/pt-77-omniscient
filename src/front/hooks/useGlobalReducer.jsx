@@ -1,7 +1,7 @@
 // Import necessary hooks and functions from React.
 import { useContext, useReducer, createContext } from "react";
 import storeReducer, { initialStore } from "../store"  // Import the reducer and the initial state.
-import {signup as handleSignup, login as handleLogin, getUser as handleGetUser, getVintageGames, getRawgGames, getGameDescription, getUserById} from "../Actions"
+import {signup as handleSignup, login as handleLogin, getUser as handleGetUser, getVintageGames, getRawgGames, getGameDescription, getUserById, saveGameForLater} from "../Actions"
 
 // Create a context to hold the global state of the application
 // We will call this global state the "store" to avoid confusion while using local states
@@ -21,6 +21,8 @@ export function StoreProvider({ children }) {
         getRawgGames: (payload) => getRawgGames(dispatch, payload),
         getGameDescription: (payload) => getGameDescription(dispatch, payload),
         getUserById: (payload) => getUserById(dispatch, payload),
+        saveGameForLater: (payload) => saveGameForLater(dispatch, payload),
+        
     }
     return <StoreContext.Provider value={{ store, dispatch, ...actions }}>
         {children}
@@ -29,6 +31,6 @@ export function StoreProvider({ children }) {
 
 // Custom hook to access the global state and dispatch function.
 export default function useGlobalReducer() {
-    const { dispatch, store, signup, login, getUser, getVintageGames, getRawgGames, getGameDescription, getUserById } = useContext(StoreContext)
-    return { dispatch, store, signup, login, getUser, getVintageGames, getRawgGames, getGameDescription, getUserById };
+    const { dispatch, store, signup, login, getUser, getVintageGames, getRawgGames, getGameDescription, getUserById, saveGameForLater } = useContext(StoreContext)
+    return { dispatch, store, signup, login, getUser, getVintageGames, getRawgGames, getGameDescription, getUserById, saveGameForLater};
 }
