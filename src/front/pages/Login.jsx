@@ -23,8 +23,8 @@ export const Login = () => {
     }
   }, [store.user, store.access_token]);
 
-  console.log("Vintage Videos", vintageVideos);
-console.log("Modern Videos", modernVideos);
+  
+
   return (
     <div
       className="d-flex justify-content-center"

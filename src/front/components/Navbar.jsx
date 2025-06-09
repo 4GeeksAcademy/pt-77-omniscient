@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { SidebarData } from "../SidebarData";
 import "../navbar.css";
@@ -6,19 +6,21 @@ import useGlobalReducer from "../hooks/useGlobalReducer.jsx";
 
 export const Navbar = () => {
   const [sidebar, setsidbar] = useState(false);
-  const { store, fetchUserInfo } = useGlobalReducer();
+
+  const { store, dispatch, getUserById } = useGlobalReducer();
+  const navigate = useNavigate();
 
   const showSideBar = () => {
     setsidbar(!sidebar);
   };
 
-  useEffect(() => {
-    if (store.token) {
-      getUserById();
-    }
-  }, [store.token]);
-
-  return (
+ useEffect(() => {
+  if (store.access_token && !store.user) {
+    getUserById();
+  }
+}, [store.access_token]);
+ 
+return (
     <>
       <div className="navbar navbar-expand-lg container-fluid d-flex align-items-center px-3">
         <div className="d-flex align-items-center">
@@ -36,18 +38,28 @@ export const Navbar = () => {
             OMNISCIENT
           </span>
         </div>
-
-        {/* Spacer to push buttons right */}
         <div className="flex-grow-1"></div>
-
-        {/* Buttons container with wrapping */}
         <div className="d-flex flex-wrap align-items-center">
-          <Link to="/signup" className="me-2 mb-2 mb-lg-0">
-            <button className="btn btn-primary">Sign Up</button>
-          </Link>
-          <Link to="/login" className="me-2 mb-2 mb-lg-0">
-            <button className="btn btn-primary">Log In</button>
-          </Link>
+          {!store.user ? (
+            <>
+              <Link to="/signup" className="me-2 mb-2 mb-lg-0">
+                <button className="btn btn-primary">Sign Up</button>
+              </Link>
+              <Link to="/login" className="me-2 mb-2 mb-lg-0">
+                <button className="btn btn-primary">Log In</button>
+              </Link>
+            </>
+          ) : (
+            <button
+              className="btn btn-danger me-2 mb-2 mb-lg-0"
+              onClick={() => {
+                dispatch({ type: "logout" });
+                navigate("/must-login");
+              }}
+            >
+              Logout
+            </button>
+          )}
         </div>
       </div>
 
