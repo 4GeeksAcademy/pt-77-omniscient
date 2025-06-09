@@ -161,3 +161,53 @@ export const saveGameForLater = async (dispatch, payload) => {
     }
 };
 
+export const getSavedGames = async (dispatch) => {
+    try {
+        const token = localStorage.getItem("access_token");
+        const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/saved-games`, {
+            method: "GET",
+            headers: {
+                "Authorization": `Bearer ${token}`
+            }
+        });
+        if (response.ok) {
+            const savedGames = await response.json();
+            dispatch({
+                type: "set_saved_games",
+                payload: savedGames
+            });
+            return savedGames;
+        } else {
+            console.error("Failed to fetch saved games");
+            return [];
+        }
+    } catch (error) {
+        console.error("Error fetching saved games:", error);
+        return [];
+    }
+};
+
+export const removeSavedGame = async (dispatch, gameId) => {
+    try {
+        const token = localStorage.getItem("access_token");
+        const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/saved-games`, {
+            method: "DELETE",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`
+            },
+            body: JSON.stringify({ game_id: gameId })
+        });
+        if (response.ok) {
+            getSavedGames(dispatch);
+            return { success: true };
+        } else {
+            console.error("Failed to remove game");
+            return { success: false };
+        }
+    } catch (error) {
+        console.error("Error removing game:", error);
+        return { success: false };
+    }
+};
+

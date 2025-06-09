@@ -157,16 +157,6 @@ def update_about():
 
     return jsonify({"message": "Profile updated", "user": user.serialize()}), 200
 
-@api.route('/saved-games', methods=['GET'])
-@jwt_required()
-def get_saved_games():
-    user_email = get_jwt_identity()
-    user = User.query.filter_by(email=user_email).first()
-    if not user:
-        return jsonify({"error": "User not found"}), 404
-
-    return jsonify(user.saved_games), 200
-
 
 @api.route('/saved-games', methods=['PUT'])
 @jwt_required()
@@ -178,12 +168,9 @@ def save_game():
     data = request.get_json()
     if not data:
         return jsonify({"error": "No game data provided"}), 400
-    # Initialize saved_games if it's None
     if user.saved_games is None:
         user.saved_games = []
-    # Create a copy to work with (SQLAlchemy JSON columns need special handling)
     saved_games = user.saved_games.copy() if user.saved_games else []
-    # Prevent duplicate entries by checking name or id
     game_exists = any(
         game.get('name') == data.get('name') or
         game.get('id') == data.get('id')
@@ -191,10 +178,8 @@ def save_game():
     )
     if game_exists:
         return jsonify({"message": "Game already saved", "saved_games": saved_games}), 200
-    # Add the new game
     saved_games.append(data)
     user.saved_games = saved_games
-    # Mark the column as modified for SQLAlchemy to detect the change
     from sqlalchemy.orm.attributes import flag_modified
     flag_modified(user, 'saved_games')
     try:
@@ -205,24 +190,43 @@ def save_game():
         return jsonify({"error": f"Failed to save game: {str(e)}"}), 500
     
     
-@api.route("/api/delete-saved-game", methods=["DELETE"])
+@api.route('/saved-games', methods=['GET'])
+@jwt_required()
+def get_saved_games():
+    user_email = get_jwt_identity()
+    user = User.query.filter_by(email=user_email).first()
+    if not user:
+        return jsonify({"error": "User not found"}), 404
+    return jsonify(user.saved_games or []), 200
+
+
+@api.route('/saved-games', methods=['DELETE'])
 @jwt_required()
 def delete_saved_game():
+    user_email = get_jwt_identity()
+    user = User.query.filter_by(email=user_email).first()
+    if not user:
+        return jsonify({"error": "User not found"}), 404
     data = request.get_json()
-    game_id = data.get("game_id")
-    user_id = get_jwt_identity()
-
-    print(f"User ID: {user_id}, Game ID: {game_id}")  
-
-    if not game_id:
-        return jsonify({"error": "Missing game_id"}), 400
-
-    game = SavedGame.query.filter_by(uid=game_id, user_id=user_id).first()
-
-    if not game:
-        return jsonify({"error": "Game not found"}), 404
-
-    db.session.delete(game)
-    db.session.commit()
-
-    return jsonify({"message": "Game deleted"}), 200
+    game_identifier = data.get("game_id") or data.get("name")
+    if not game_identifier:
+        return jsonify({"error": "Missing game identifier (game_id or name)"}), 400
+    if not user.saved_games:
+        return jsonify({"error": "No saved games found"}), 404
+    saved_games = user.saved_games.copy()
+    original_length = len(saved_games)
+    saved_games = [
+        game for game in saved_games
+        if game.get('id') != game_identifier and game.get('name') != game_identifier
+    ]
+    if len(saved_games) == original_length:
+        return jsonify({"error": "Game not found in saved games"}), 404
+    user.saved_games = saved_games
+    from sqlalchemy.orm.attributes import flag_modified
+    flag_modified(user, 'saved_games')
+    try:
+        db.session.commit()
+        return jsonify({"message": "Game removed", "saved_games": user.saved_games}), 200
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({"error": f"Failed to remove game: {str(e)}"}), 500

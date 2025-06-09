@@ -1,7 +1,7 @@
 // Import necessary hooks and functions from React.
 import { useContext, useReducer, createContext } from "react";
 import storeReducer, { initialStore } from "../store"  // Import the reducer and the initial state.
-import {signup as handleSignup, login as handleLogin, getUser as handleGetUser, getVintageGames, getRawgGames, getGameDescription, getUserById, saveGameForLater} from "../Actions"
+import {signup as handleSignup, login as handleLogin, getUser as handleGetUser, getVintageGames, getRawgGames, getGameDescription, getUserById, saveGameForLater, getSavedGames, removeSavedGame} from "../Actions"
 
 // Create a context to hold the global state of the application
 // We will call this global state the "store" to avoid confusion while using local states
@@ -22,8 +22,10 @@ export function StoreProvider({ children }) {
         getGameDescription: (payload) => getGameDescription(dispatch, payload),
         getUserById: (payload) => getUserById(dispatch, payload),
         saveGameForLater: (payload) => saveGameForLater(dispatch, payload),
-        
+        getSavedGames: () => getSavedGames(dispatch),
+        removeSavedGame: (gameId) => removeSavedGame(dispatch, gameId),
     }
+
     return <StoreContext.Provider value={{ store, dispatch, ...actions }}>
         {children}
     </StoreContext.Provider>
@@ -31,6 +33,6 @@ export function StoreProvider({ children }) {
 
 // Custom hook to access the global state and dispatch function.
 export default function useGlobalReducer() {
-    const { dispatch, store, signup, login, getUser, getVintageGames, getRawgGames, getGameDescription, getUserById, saveGameForLater } = useContext(StoreContext)
-    return { dispatch, store, signup, login, getUser, getVintageGames, getRawgGames, getGameDescription, getUserById, saveGameForLater};
+    const { dispatch, store, signup, login, getUser, getVintageGames, getRawgGames, getGameDescription, getUserById, saveGameForLater, getSavedGames, removeSavedGame } = useContext(StoreContext)
+    return { dispatch, store, signup, login, getUser, getVintageGames, getRawgGames, getGameDescription, getUserById, saveGameForLater, getSavedGames, removeSavedGame };
 }
