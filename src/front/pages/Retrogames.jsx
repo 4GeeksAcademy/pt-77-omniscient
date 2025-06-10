@@ -77,9 +77,9 @@ export const RetroGames = () => {
 
       <div className="row">
         {filteredGames.length > 0 ? (
-          filteredGames.map((vintageGames) => (
+          filteredGames.map((vintageGames, index) => (
             <div
-              key={vintageGames.uid}
+              key={index}
               className="col-6 col-md-4 col-lg-3 mb-4"
             >
               {/* <Link

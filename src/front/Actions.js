@@ -27,16 +27,26 @@ export const login = async (dispatch, payload) => {
   });
 };
 
+export const logout = (dispatch) => {
+  localStorage.removeItem("access_token");
+  localStorage.removeItem("user");
+  sessionStorage.removeItem("access_token");
+
+  dispatch({
+    type: "logout",
+  });
+};
+
 export const getUser = async (dispatch, payload) => {
-//   // let response = await fetch(import.meta.env.VITE_BACKEND_URL + "/profile", {
-//   //   method: "Get",
-//   //   headers: { Authorization: "Bearer " + payload },
-//   // });
-//   // let data = await response.json();
-//   // dispatch({
-//   //   type: "set_user",
-//   //   payload: { user: data.user, access_token: payload },
-//   // });
+  //   // let response = await fetch(import.meta.env.VITE_BACKEND_URL + "/profile", {
+  //   //   method: "Get",
+  //   //   headers: { Authorization: "Bearer " + payload },
+  //   // });
+  //   // let data = await response.json();
+  //   // dispatch({
+  //   //   type: "set_user",
+  //   //   payload: { user: data.user, access_token: payload },
+  //   // });
 };
 
 export const getVintageGames = async (dispatch, payload) => {
@@ -63,7 +73,6 @@ export const getVintageGames = async (dispatch, payload) => {
 
   return data; // Return the data so caller can use it
 };
-
 
 export const getRawgGames = async (dispatch, payload) => {
   let response = await fetch(
@@ -96,17 +105,119 @@ export const getGameDescription = async (slug) => {
   };
 };
 
-export const getUserById = async (dispatch, payload) => {
-  const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/user`, {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${sessionStorage.getItem("access_token")}`,
-    },
-  });
+export const getUserById = async (dispatch) => {
+  try {
+    const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/user`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+      },
+    });
 
-  const data = await response.json();
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
 
-  dispatch({ type: "set_user", payload: { user, access_token } });
-localStorage.setItem("user", JSON.stringify(user));
+    const data = await response.json();
+
+    const user = data.user;
+    const access_token = data.access_token;
+
+    dispatch({ type: "set_user", payload: { user, access_token } });
+    localStorage.setItem("user", JSON.stringify(user));
+  } catch (error) {
+    console.error("Failed to fetch user by ID:", error);
+  }
+};
+
+export const saveGameForLater = async (dispatch, payload) => {
+  try {
+    const token = localStorage.getItem("access_token");
+    const response = await fetch(
+      `${import.meta.env.VITE_BACKEND_URL}/saved-games`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(payload),
+      }
+    );
+    if (response.ok) {
+      const data = await response.json();
+      dispatch({
+        type: "set_saved_games",
+        payload: data.saved_games,
+      });
+      return { success: true, message: "Game saved successfully!" };
+    } else {
+      const errorData = await response.json();
+      console.error("Error saving game:", errorData);
+      return {
+        success: false,
+        message: errorData.message || "Failed to save game",
+      };
+    }
+  } catch (error) {
+    console.error("Network error:", error);
+    return { success: false, message: "Network error occurred" };
+  }
+};
+
+export const getSavedGames = async (dispatch) => {
+  try {
+    const token = localStorage.getItem("access_token");
+    const response = await fetch(
+      `${import.meta.env.VITE_BACKEND_URL}/saved-games`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    if (response.ok) {
+      const savedGames = await response.json();
+      dispatch({
+        type: "set_saved_games",
+        payload: savedGames,
+      });
+      return savedGames;
+    } else {
+      console.error("Failed to fetch saved games");
+      return [];
+    }
+  } catch (error) {
+    console.error("Error fetching saved games:", error);
+    return [];
+  }
+};
+
+export const removeSavedGame = async (dispatch, gameId) => {
+  try {
+    const token = localStorage.getItem("access_token");
+    const response = await fetch(
+      `${import.meta.env.VITE_BACKEND_URL}/saved-games`,
+      {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ game_id: gameId }),
+      }
+    );
+    if (response.ok) {
+      getSavedGames(dispatch);
+      return { success: true };
+    } else {
+      console.error("Failed to remove game");
+      return { success: false };
+    }
+  } catch (error) {
+    console.error("Error removing game:", error);
+    return { success: false };
+  }
 };

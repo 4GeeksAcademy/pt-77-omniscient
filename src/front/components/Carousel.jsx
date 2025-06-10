@@ -53,7 +53,7 @@ export const Carousel = ({ games }) => {
                         : game.img?.replace("t_thumb", "t_720p")
                     }
                     alt={game.name || "Game Image"}
-                    onError={(e) => (e.target.src = "/fallback.jpg")}
+                    onError={(e) => (e.target.src = "https://t3.ftcdn.net/jpg/04/60/01/36/360_F_460013622_6xF8uN6ubMvLx0tAJECBHfKPoNOR5cRa.jpg")}
                     className="d-block"
                     style={{
                      maxHeight: "400px",

@@ -10,9 +10,10 @@ import hashlib
 import requests
 
 
+
 api = Blueprint('api', __name__)
 
-# Allow CORS requests to this API
+
 CORS(api)
 
 
@@ -155,3 +156,77 @@ def update_about():
     db.session.commit()
 
     return jsonify({"message": "Profile updated", "user": user.serialize()}), 200
+
+
+@api.route('/saved-games', methods=['PUT'])
+@jwt_required()
+def save_game():
+    user_email = get_jwt_identity()
+    user = User.query.filter_by(email=user_email).first()
+    if not user:
+        return jsonify({"error": "User not found"}), 404
+    data = request.get_json()
+    if not data:
+        return jsonify({"error": "No game data provided"}), 400
+    if user.saved_games is None:
+        user.saved_games = []
+    saved_games = user.saved_games.copy() if user.saved_games else []
+    game_exists = any(
+        game.get('name') == data.get('name') or
+        game.get('id') == data.get('id')
+        for game in saved_games
+    )
+    if game_exists:
+        return jsonify({"message": "Game already saved", "saved_games": saved_games}), 200
+    saved_games.append(data)
+    user.saved_games = saved_games
+    from sqlalchemy.orm.attributes import flag_modified
+    flag_modified(user, 'saved_games')
+    try:
+        db.session.commit()
+        return jsonify({"message": "Game saved", "saved_games": user.saved_games}), 200
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({"error": f"Failed to save game: {str(e)}"}), 500
+    
+    
+@api.route('/saved-games', methods=['GET'])
+@jwt_required()
+def get_saved_games():
+    user_email = get_jwt_identity()
+    user = User.query.filter_by(email=user_email).first()
+    if not user:
+        return jsonify({"error": "User not found"}), 404
+    return jsonify(user.saved_games or []), 200
+
+
+@api.route('/saved-games', methods=['DELETE'])
+@jwt_required()
+def delete_saved_game():
+    user_email = get_jwt_identity()
+    user = User.query.filter_by(email=user_email).first()
+    if not user:
+        return jsonify({"error": "User not found"}), 404
+    data = request.get_json()
+    game_identifier = data.get("game_id") or data.get("name")
+    if not game_identifier:
+        return jsonify({"error": "Missing game identifier (game_id or name)"}), 400
+    if not user.saved_games:
+        return jsonify({"error": "No saved games found"}), 404
+    saved_games = user.saved_games.copy()
+    original_length = len(saved_games)
+    saved_games = [
+        game for game in saved_games
+        if game.get('id') != game_identifier and game.get('name') != game_identifier
+    ]
+    if len(saved_games) == original_length:
+        return jsonify({"error": "Game not found in saved games"}), 404
+    user.saved_games = saved_games
+    from sqlalchemy.orm.attributes import flag_modified
+    flag_modified(user, 'saved_games')
+    try:
+        db.session.commit()
+        return jsonify({"message": "Game removed", "saved_games": user.saved_games}), 200
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({"error": f"Failed to remove game: {str(e)}"}), 500

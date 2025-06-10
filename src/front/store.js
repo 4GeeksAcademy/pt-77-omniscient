@@ -4,7 +4,7 @@ export const initialStore = () => {
 
   return {
     message: null,
-    user: user || null,
+    user: access_token ? user : null,
     access_token: access_token || null,
     vintageGames: [],
     rawgGames: [],
@@ -17,14 +17,13 @@ export default function storeReducer(store, action = {}) {
   switch (action.type) {
     case "set_user":
       const { user, access_token } = action.payload;
-      sessionStorage.setItem("access_token", access_token);
       localStorage.setItem("access_token", access_token);
       localStorage.setItem("user", JSON.stringify(user));
 
       return {
         ...store,
-        user,
-        access_token,
+        user: action.payload.user,
+        access_token: action.payload.access_token,
       };
 
     case "add_vintageGames":
@@ -53,22 +52,22 @@ export default function storeReducer(store, action = {}) {
         user: updatedUser,
       };
 
-      case "like_game":
-  return {
-    ...store,
-    gameReactions: {
-      ...state.gameReactions,
-      [action.payload.uid]: { liked: true, disliked: false },
-    },
-  };
-case "dislike_game":
-  return {
-    ...store,
-    gameReactions: {
-      ...state.gameReactions,
-      [action.payload.uid]: { liked: false, disliked: true },
-    },
-  };
+    case "logout":
+      localStorage.removeItem("access_token");
+      localStorage.removeItem("user");
+      sessionStorage.removeItem("access_token");
+
+      return {
+        ...store,
+        user: null,
+        access_token: null,
+      };
+
+    case "set_saved_games":
+      return {
+        ...store,
+        save_for_later: action.payload,
+      };
 
     default:
       console.error("Unknown action type:", action.type);

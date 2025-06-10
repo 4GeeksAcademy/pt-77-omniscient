@@ -46,10 +46,10 @@ export const RawgGameCarousel = ({ games }) => {
                     src={
                       game?.img?.startsWith("//")
                         ? `https:${game.img}`
-                        : game.img || "/fallback.jpg"
+                        : game.img || "https://t3.ftcdn.net/jpg/04/60/01/36/360_F_460013622_6xF8uN6ubMvLx0tAJECBHfKPoNOR5cRa.jpg"
                     }
                     alt={game.name || "Game image"}
-                    onError={(e) => (e.target.src = "/fallback.jpg")}
+                    onError={(e) => (e.target.src = "https://t3.ftcdn.net/jpg/04/60/01/36/360_F_460013622_6xF8uN6ubMvLx0tAJECBHfKPoNOR5cRa.jpg")}
                     className="d-block"
                     style={{
                      maxHeight: "400px",
