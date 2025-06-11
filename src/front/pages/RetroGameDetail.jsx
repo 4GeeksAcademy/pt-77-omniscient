@@ -26,50 +26,90 @@ export const RetroGameDetails = () => {
     : null;
 
   return (
-    <div
-      className=" text-center  container-fluid"
+   <div
+      className="text-center container-fluid"
       style={{
         backgroundImage: `url(${projectimage1})`,
         backgroundSize: "cover",
         backgroundPosition: "center",
         backgroundAttachment: "fixed",
         backgroundRepeat: "no-repeat",
-        //  height: "100vh",
         width: "100vw",
       }}
     >
-      <div className="container text-white ">
+      <div className="container text-white p-4" style={{ maxWidth: 900 }}>
         <h2>{game.name}</h2>
-        <img
-          src={coverUrl}
-          alt={game.name}
-          style={{
-            width: "30%", 
-            maxWidth: "600px", 
-            height: "auto", 
-            borderRadius: "1rem",
-            marginBottom: "1rem",
-          }}
-        />
-
+        {coverUrl && (
+          <img
+            src={coverUrl}
+            alt={game.name}
+            style={{
+              width: "30%",
+              maxWidth: "600px",
+              height: "auto",
+              borderRadius: "1rem",
+              marginBottom: "1rem",
+            }}
+          />
+        )}
         <p>{game.summary}</p>
-        <p>
-          <strong>Release Date:</strong> {releaseDate}
-        </p>
-
-        {game.genres?.length > 0 && (
-          <p>
-            <strong>Genres:</strong> {game.genres.map((g) => g.name).join(", ")}
-          </p>
-        )}
-
-        {game.platforms?.length > 0 && (
-          <p>
-            <strong>Platforms:</strong>{" "}
-            {game.platforms.map((p) => p.name).join(", ")}
-          </p>
-        )}
-
+        <div
+          className="mt-4 mb-3"
+          style={{
+            fontSize: "1.1rem",
+            color: "#ccc",
+            lineHeight: "1.6",
+            display: "flex",
+            flexWrap: "wrap",
+            justifyContent: "space-between",
+            gap: "1rem",
+          }}
+        >
+          <div>
+            <strong style={{ color: "#0ff" }}>Release Date:</strong>{" "}
+            <em>{releaseDate}</em>
+          </div>
+          {game.genres?.length > 0 && (
+            <div>
+              <strong style={{ color: "#f90" }}>Genres:</strong>{" "}
+              {game.genres.map((g) => g.name).join(", ")}
+            </div>
+          )}
+        </div>
+        <div
+          className="mb-4"
+          style={{
+            fontSize: "1.1rem",
+            color: "#ccc",
+            lineHeight: "1.6",
+            display: "flex",
+            flexWrap: "wrap",
+            justifyContent: "space-between",
+            gap: "1rem",
+          }}
+        >
+          {game.platforms?.length > 0 && (
+            <div>
+              <strong style={{ color: "#0ff" }}>Platforms:</strong>{" "}
+              {game.platforms.map((p) => p.name).join(", ")}
+            </div>
+          )}
+          {game.involved_companies?.length > 0 && (
+            <div>
+              <strong style={{ color: "#0ff" }}>Developer:</strong>{" "}
+              {game.involved_companies.find((c) => c.developer)?.company
+                ?.name || "N/A"}
+            </div>
+          )}
+          {game.rating && (
+            <div>
+              <strong style={{ color: "#ff0" }}>Rating:</strong>{" "}
+              <span style={{ fontSize: "1.2rem", color: "#FEFEFE" }}>
+                {Math.round(game.rating)} / 100
+              </span>
+            </div>
+          )}
+        </div>
         {game.involved_companies?.length > 0 && (
           <p>
             <strong>Developer:</strong>{" "}
@@ -77,15 +117,8 @@ export const RetroGameDetails = () => {
               "N/A"}
           </p>
         )}
-
-        {game.rating && (
-          <p>
-            <strong>Rating:</strong> {Math.round(game.rating)} / 100
-          </p>
-        )}
-
         <h3 className="mt-5">Screenshots</h3>
-        {game.screenshots?.length > 0 && (
+        {game.screenshots?.length > 0 ? (
           <div
             className="mt-5"
             style={{
@@ -113,6 +146,8 @@ export const RetroGameDetails = () => {
               />
             ))}
           </div>
+        ) : (
+          <p>No screenshots available for this game.</p>
         )}
       </div>
     </div>
