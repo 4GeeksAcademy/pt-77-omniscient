@@ -35,7 +35,6 @@ export const RetroGames = () => {
         width: "100vw",
       }}
     >
-      {/* Header with centered title and top-right search bar */}
       <div
         style={{
           position: "relative",
