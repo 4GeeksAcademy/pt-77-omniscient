@@ -2,7 +2,6 @@ import React, { useEffect, useState, useRef, useCallback } from "react";
 import useGlobalReducer from "../hooks/useGlobalReducer.jsx";
 import { RawgGameCard } from "../components/RawgGameCard.jsx";
 import projectimage1 from "../assets/img/projectimage1.png";
-
 export const Games = () => {
   const { store } = useGlobalReducer();
   const [games, setGames] = useState([]);
@@ -11,9 +10,7 @@ export const Games = () => {
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
-
   const observer = useRef();
-
   const fetchGames = async (pageNum) => {
     if (loading) return;
     setLoading(true);
@@ -35,7 +32,6 @@ export const Games = () => {
     }
     setLoading(false);
   };
-
   const enrichGamesWithDescriptions = async (gamesToEnrich) => {
     return await Promise.all(
       gamesToEnrich.map(async (game) => {
@@ -51,20 +47,17 @@ export const Games = () => {
       })
     );
   };
-
   useEffect(() => {
     if (searchTerm.length === 0) {
       fetchGames(page);
     }
   }, [page, searchTerm]);
-
   useEffect(() => {
     if (searchTerm.length === 0 && games.length) {
       const newGames = games.filter(
         (game) => !gamesWithDescriptions.some((g) => g.id === game.id)
       );
       if (newGames.length === 0) return;
-
       enrichGamesWithDescriptions(newGames).then((enriched) => {
         setGamesWithDescriptions((prev) =>
           page === 1 ? enriched : [...prev, ...enriched]
@@ -74,7 +67,6 @@ export const Games = () => {
       setGamesWithDescriptions([]);
     }
   }, [games, searchTerm, page]);
-
   const fetchSearchedGames = async (query) => {
     setLoading(true);
     try {
@@ -95,7 +87,6 @@ export const Games = () => {
     }
     setLoading(false);
   };
-
   useEffect(() => {
     const delayDebounce = setTimeout(() => {
       if (searchTerm.length > 2) {
@@ -107,29 +98,24 @@ export const Games = () => {
         setPage(1);
       }
     }, 500);
-
     return () => clearTimeout(delayDebounce);
   }, [searchTerm]);
-
   const lastGameRef = useCallback(
     (node) => {
       if (loading || searchTerm.length > 0) return;
       if (observer.current) observer.current.disconnect();
-
       observer.current = new IntersectionObserver((entries) => {
         if (entries[0].isIntersecting && hasMore) {
           setPage((prev) => prev + 1);
         }
       });
-
       if (node) observer.current.observe(node);
     },
     [loading, hasMore, searchTerm]
   );
-
   return (
     <div
-      className="text-center container-fluid px-3 px-md-5"
+      className="text-center container-fluid"
       style={{
         position: "relative",
         backgroundImage: `url(${projectimage1})`,
@@ -145,54 +131,55 @@ export const Games = () => {
         paddingTop: "4rem",
       }}
     >
-      <div
-        style={{
-          position: "absolute",
-          top: "1rem",
-          right: "1rem",
-          left: "1rem",
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          zIndex: 10,
-          gap: "1rem",
-        }}
-      >
-        <h1
-          className="text-white"
-          style={{
-            fontWeight: "600",
-            fontSize: "1.8rem",
-            margin: 0,
-            flex: "1 1 auto",
-            whiteSpace: "nowrap",
-            overflow: "hidden",
-            textOverflow: "ellipsis",
-          }}
-        >
-          A selection of Modern Games
-        </h1>
-
-        <input
-          type="text"
-          placeholder="Search games..."
-          className="form-control"
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          style={{
-            width: "250px",
-            minWidth: "150px",
-            padding: "0.4rem 0.75rem",
-            borderRadius: "20px",
-            border: "1px solid #ddd",
-            boxShadow: "0 2px 6px rgba(0,0,0,0.2)",
-            fontSize: "1rem",
-            outline: "none",
-          }}
-        />
-      </div>
-
-      <div className="row" style={{ width: "100%", maxWidth: "1200px" }}>
+<div
+  style={{
+    position: "relative",
+    marginBottom: "2rem",
+    maxWidth: "1200px",
+    marginLeft: "auto",
+    marginRight: "auto",
+    width: "100%",
+    padding: "0 1rem",
+  }}
+>
+  <h1
+    className="text-white"
+    style={{
+      fontWeight: "600",
+      fontSize: "2.5rem",
+      margin: 0,
+      textAlign: "center",
+      whiteSpace: "nowrap",
+      overflow: "hidden",
+      textOverflow: "ellipsis",
+    }}
+  >
+    A Selection of Modern Games
+  </h1>
+  <input
+    type="text"
+    placeholder="Search games..."
+    className="form-control"
+    value={searchTerm}
+    onChange={(e) => setSearchTerm(e.target.value)}
+    style={{
+      position: "absolute",
+      top: "50%",
+      right: "-275px",
+      transform: "translateY(-50%)",
+      width: "250px",
+      minWidth: "150px",
+      padding: "0.4rem 0.75rem",
+      borderRadius: "20px",
+      border: "1px solid #ddd",
+      boxShadow: "0 2px 6px rgba(0,0,0,0.2)",
+      fontSize: "1rem",
+      outline: "none",
+    }}
+  />
+</div>
+      {/* Remove maxWidth limit, full width row */}
+      <div className="row w-100 px-3 px-md-5">
         {gamesWithDescriptions.map((rawgGame, index) => {
           const isLast = index === gamesWithDescriptions.length - 1;
           return (
@@ -211,7 +198,6 @@ export const Games = () => {
           );
         })}
       </div>
-
       {loading && <p className="text-white mt-3">Loading more games...</p>}
       {!hasMore && !loading && (
         <p className="text-white mt-3">No more games to load.</p>
