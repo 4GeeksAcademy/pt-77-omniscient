@@ -1,31 +1,59 @@
 export const signup = async (dispatch, payload) => {
-  let response = await fetch(import.meta.env.VITE_BACKEND_URL + "/signup", {
-    method: "POST",
-    headers: { "Content-type": "application/json" },
-    body: JSON.stringify({
-      email: payload.email,
-      password: payload.password,
-    }),
-  });
-  let data = await response.json();
+  try {
+    const response = await fetch(import.meta.env.VITE_BACKEND_URL + "/signup", {
+      method: "POST",
+      headers: { "Content-type": "application/json" },
+      body: JSON.stringify({
+        email: payload.email,
+        password: payload.password,
+      }),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      console.error("Signup error:", errorData);
+      return false;
+    }
+
+    // Signup success
+    const data = await response.json();
+    // Optionally dispatch user or token here if backend returns them
+    return true;
+  } catch (error) {
+    console.error("Network or fetch error:", error);
+    return false;
+  }
 };
 
 export const login = async (dispatch, payload) => {
-  let response = await fetch(import.meta.env.VITE_BACKEND_URL + "/login", {
-    method: "POST",
-    headers: { "Content-type": "application/json" },
-    body: JSON.stringify({
-      email: payload.email,
-      password: payload.password,
-    }),
-  });
-  let data = await response.json();
+  try {
+    const resp = await fetch(`${import.meta.env.VITE_BACKEND_URL}/login`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    });
 
-  dispatch({
-    type: "set_user",
-    payload: { user: data.user, access_token: data.access_token },
-  });
+    if (!resp.ok) return false;
+
+    const data = await resp.json();
+
+    if (!data.user || !data.access_token) return false;
+
+    dispatch({
+      type: "set_user",
+      payload: {
+        user: data.user,
+        access_token: data.access_token,
+      },
+    });
+
+    return true;
+  } catch (error) {
+    console.error("Login error:", error);
+    return false;
+  }
 };
+
 
 export const logout = (dispatch) => {
   localStorage.removeItem("access_token");

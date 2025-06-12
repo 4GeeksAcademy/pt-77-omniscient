@@ -129,7 +129,7 @@ export const Games = () => {
 
   return (
     <div
-      className="text-center container-fluid px-3 px-md-5"
+      className="text-center container-fluid"
       style={{
         position: "relative",
         backgroundImage: `url(${projectimage1})`,
@@ -145,54 +145,58 @@ export const Games = () => {
         paddingTop: "4rem",
       }}
     >
-      <div
-        style={{
-          position: "absolute",
-          top: "1rem",
-          right: "1rem",
-          left: "1rem",
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          zIndex: 10,
-          gap: "1rem",
-        }}
-      >
-        <h1
-          className="text-white"
-          style={{
-            fontWeight: "600",
-            fontSize: "1.8rem",
-            margin: 0,
-            flex: "1 1 auto",
-            whiteSpace: "nowrap",
-            overflow: "hidden",
-            textOverflow: "ellipsis",
-          }}
-        >
-          A selection of Modern Games
-        </h1>
+<div
+  style={{
+    position: "relative",
+    marginBottom: "2rem",
+    maxWidth: "1200px",
+    marginLeft: "auto",
+    marginRight: "auto",
+    width: "100%",
+    padding: "0 1rem",
+  }}
+>
+  <h1
+    className="text-white"
+    style={{
+      fontWeight: "600",
+      fontSize: "2.5rem",
+      margin: 0,
+      textAlign: "center",
+      whiteSpace: "nowrap",
+      overflow: "hidden",
+      textOverflow: "ellipsis",
+    }}
+  >
+    A Selection of Modern Games
+  </h1>
 
-        <input
-          type="text"
-          placeholder="Search games..."
-          className="form-control"
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          style={{
-            width: "250px",
-            minWidth: "150px",
-            padding: "0.4rem 0.75rem",
-            borderRadius: "20px",
-            border: "1px solid #ddd",
-            boxShadow: "0 2px 6px rgba(0,0,0,0.2)",
-            fontSize: "1rem",
-            outline: "none",
-          }}
-        />
-      </div>
+  <input
+    type="text"
+    placeholder="Search games..."
+    className="form-control"
+    value={searchTerm}
+    onChange={(e) => setSearchTerm(e.target.value)}
+    style={{
+      position: "absolute",
+      top: "50%",
+      right: "-275px",
+      transform: "translateY(-50%)",
+      width: "250px",
+      minWidth: "150px",
+      padding: "0.4rem 0.75rem",
+      borderRadius: "20px",
+      border: "1px solid #ddd",
+      boxShadow: "0 2px 6px rgba(0,0,0,0.2)",
+      fontSize: "1rem",
+      outline: "none",
+    }}
+  />
+</div>
 
-      <div className="row" style={{ width: "100%", maxWidth: "1200px" }}>
+
+      {/* Remove maxWidth limit, full width row */}
+      <div className="row w-100 px-3 px-md-5">
         {gamesWithDescriptions.map((rawgGame, index) => {
           const isLast = index === gamesWithDescriptions.length - 1;
           return (

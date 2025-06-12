@@ -23,8 +23,6 @@ export const Login = () => {
     }
   }, [store.user, store.access_token]);
 
-  
-
   return (
     <div
       className="d-flex justify-content-center"
@@ -41,7 +39,7 @@ export const Login = () => {
       <form
         onSubmit={handleLogin}
         className="p-4 rounded w-100"
-        style={{ maxWidth: "400px", marginTop: "100px" }} // moved up ~2.5 inches
+        style={{ maxWidth: "400px", marginTop: "100px" }}
       >
         <h1 className="text-white text-center mb-4">Login</h1>
 
@@ -50,7 +48,10 @@ export const Login = () => {
             type="email"
             className="form-control"
             placeholder="Email"
-            onChange={(e) => setUser({ ...user, email: e.target.value })}
+            onChange={(e) => {
+              setError(null);
+              setUser({ ...user, email: e.target.value });
+            }}
             required
           />
         </div>
@@ -60,7 +61,10 @@ export const Login = () => {
             type="password"
             className="form-control"
             placeholder="Password"
-            onChange={(e) => setUser({ ...user, password: e.target.value })}
+            onChange={(e) => {
+              setError(null);
+              setUser({ ...user, password: e.target.value });
+            }}
             required
           />
         </div>
