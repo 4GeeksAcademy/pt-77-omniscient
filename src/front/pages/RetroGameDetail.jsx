@@ -23,6 +23,14 @@ export const RetroGameDetails = () => {
       : `https:${game.cover.url.replace("t_thumb", "t_cover_big")}`
     : null;
 
+  const backgroundBox = {
+    backgroundColor: "rgba(0, 0, 0, 0.65)",
+    padding: "1rem",
+    borderRadius: "0.5rem",
+    marginBottom: "1rem",
+    color: "#eee",
+  };
+
   return (
     <div
       className="text-center container-fluid"
@@ -33,10 +41,15 @@ export const RetroGameDetails = () => {
         backgroundAttachment: "fixed",
         backgroundRepeat: "no-repeat",
         width: "100vw",
+        minHeight: "100vh",
+        paddingTop: "2rem",
       }}
     >
       <div className="container text-white p-4" style={{ maxWidth: 900 }}>
-        <h2>{game.name}</h2>
+        <div style={backgroundBox}>
+          <h2>{game.name}</h2>
+        </div>
+
         {coverUrl && (
           <img
             src={coverUrl}
@@ -51,28 +64,26 @@ export const RetroGameDetails = () => {
           />
         )}
 
-        <p>{game.summary}</p>
+        <div style={backgroundBox}>
+          <p>{game.summary}</p>
+        </div>
 
-        {/* Release Date and Genres on the same line */}
         <div
           className="mt-4 mb-3"
           style={{
-            fontSize: "1.1rem",
-            color: "#ccc",
-            lineHeight: "1.6",
             display: "flex",
             flexWrap: "wrap",
             justifyContent: "space-between",
             gap: "1rem",
           }}
         >
-          <div>
+          <div style={backgroundBox}>
             <strong style={{ color: "#0ff" }}>Release Date:</strong>{" "}
             <em>{releaseDate}</em>
           </div>
 
           {game.genres?.length > 0 && (
-            <div>
+            <div style={backgroundBox}>
               <strong style={{ color: "#f90" }}>Genres:</strong>{" "}
               {game.genres.map((g) => g.name).join(", ")}
             </div>
@@ -82,9 +93,6 @@ export const RetroGameDetails = () => {
         <div
           className="mb-4"
           style={{
-            fontSize: "1.1rem",
-            color: "#ccc",
-            lineHeight: "1.6",
             display: "flex",
             flexWrap: "wrap",
             justifyContent: "space-between",
@@ -92,14 +100,14 @@ export const RetroGameDetails = () => {
           }}
         >
           {game.platforms?.length > 0 && (
-            <div>
+            <div style={backgroundBox}>
               <strong style={{ color: "#0ff" }}>Platforms:</strong>{" "}
               {game.platforms.map((p) => p.name).join(", ")}
             </div>
           )}
 
           {game.involved_companies?.length > 0 && (
-            <div>
+            <div style={backgroundBox}>
               <strong style={{ color: "#0ff" }}>Developer:</strong>{" "}
               {game.involved_companies.find((c) => c.developer)?.company
                 ?.name || "N/A"}
@@ -107,7 +115,7 @@ export const RetroGameDetails = () => {
           )}
 
           {game.rating && (
-            <div>
+            <div style={backgroundBox}>
               <strong style={{ color: "#ff0" }}>Rating:</strong>{" "}
               <span style={{ fontSize: "1.2rem", color: "#fefefe" }}>
                 {Math.round(game.rating)} / 100
@@ -116,18 +124,11 @@ export const RetroGameDetails = () => {
           )}
         </div>
 
-        {game.involved_companies?.length > 0 && (
-          <p>
-            <strong>Developer:</strong>{" "}
-            {game.involved_companies.find((c) => c.developer)?.company?.name ||
-              "N/A"}
-          </p>
-        )}
+        <h3 className="mt-5" style={backgroundBox}>Screenshots</h3>
 
-        <h3 className="mt-5">Screenshots</h3>
         {game.screenshots?.length > 0 ? (
           <div
-            className="mt-5"
+            className="mt-4"
             style={{
               display: "grid",
               gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
@@ -154,7 +155,9 @@ export const RetroGameDetails = () => {
             ))}
           </div>
         ) : (
-          <p>No screenshots available for this game.</p>
+          <div style={backgroundBox}>
+            <p>No screenshots available for this game.</p>
+          </div>
         )}
       </div>
     </div>
