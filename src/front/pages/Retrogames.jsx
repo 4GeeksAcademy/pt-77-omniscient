@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import useGlobalReducer from "../hooks/useGlobalReducer.jsx";
 import { GameCard } from "../components/GameCard.jsx";
 import projectimage1 from "../assets/img/projectimage1.png";
-// import { Link } from "react-router-dom";
 
 export const RetroGames = () => {
   const { store, dispatch, getVintageGames } = useGlobalReducer();
@@ -33,18 +32,20 @@ export const RetroGames = () => {
         backgroundAttachment: "fixed",
         backgroundRepeat: "no-repeat",
         width: "100vw",
+        minHeight: "100vh",
       }}
     >
-      {/* Header with centered title and top-right search bar */}
+      {/* Header with centered title and fixed-position search bar */}
       <div
+        className="position-relative d-flex align-items-center justify-content-center"
         style={{
-          position: "relative",
+          minHeight: "120px",
           padding: "20px",
           marginBottom: "20px",
         }}
       >
         <h1
-          className="text-white"
+          className="text-white w-100"
           style={{
             textAlign: "center",
             margin: 0,
@@ -59,8 +60,8 @@ export const RetroGames = () => {
           placeholder="Search retro games..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
+          className="position-absolute"
           style={{
-            position: "absolute",
             top: "20px",
             right: "20px",
             width: "250px",
@@ -75,25 +76,21 @@ export const RetroGames = () => {
         />
       </div>
 
-      <div className="row">
+      {/* Game Cards */}
+      <div className="row px-3">
         {filteredGames.length > 0 ? (
           filteredGames.map((vintageGames, index) => (
             <div
               key={index}
               className="col-6 col-md-4 col-lg-3 mb-4"
             >
-              {/* <Link
-                to={`/retrogame/${vintageGames.id}`}
-                style={{ textDecoration: "none", color: "inherit" }}
-              > */}
-                <GameCard
-                  type={"vintageGames"}
-                  name={vintageGames.name}
-                  uid={vintageGames.id}
-                  img={vintageGames.cover?.url || ""}
-                  summary={vintageGames.summary}
-                />
-              {/* </Link> */}
+              <GameCard
+                type={"vintageGames"}
+                name={vintageGames.name}
+                uid={vintageGames.id}
+                img={vintageGames.cover?.url || ""}
+                summary={vintageGames.summary}
+              />
             </div>
           ))
         ) : (
