@@ -81,17 +81,15 @@ export const Merch = () => {
     >
       <div className="container py-5 text-white">
         <div className="text-center mb-5">
-          <h1
-            className="display-4 fw-bold d-inline-block bg-dark bg-opacity-50 p-3 rounded"
-          >
+          <h1 className="display-4 fw-bold">
             🎮 Gameplay Showcase
           </h1>
         </div>
 
         {/* Vintage Videos */}
         <section className="mb-5">
-          <h2 className="h4 fw-semibold mb-4">
-            <span className="bg-dark bg-opacity-50 px-3 py-1 rounded d-inline-block">
+          <h2 className="h4 fw-semibold mb-4 text-center">
+            <span className="display-4 fw-bold">
               🕹️ Vintage Gameplays
             </span>
           </h2>
@@ -121,9 +119,9 @@ export const Merch = () => {
 
         {/* Modern Videos */}
         <section>
-          <h2 className="h4 fw-semibold mb-4">
-            <span className="bg-dark bg-opacity-50 px-3 py-1 rounded d-inline-block">
-              🧩 Modern Game Trailers (RAWG)
+          <h2 className="h4 fw-semibold mb-4 text-center">
+            <span className="display-4 fw-bold">
+              🧩 Modern Game Trailers 
             </span>
           </h2>
           {modernVideos.length === 0 ? (
@@ -138,7 +136,11 @@ export const Merch = () => {
                     <div className="p-3 bg-dark bg-opacity-50 shadow rounded text-white">
                       <h5 className="mb-2">{video.name}</h5>
                       <div className="ratio ratio-16x9">
-                        <video controls className="w-100 h-100 rounded" preload="metadata">
+                        <video
+                          controls
+                          className="w-100 h-100 rounded"
+                          preload="metadata"
+                        >
                           <source src={video.video} type="video/mp4" />
                           Your browser does not support the video tag.
                         </video>
