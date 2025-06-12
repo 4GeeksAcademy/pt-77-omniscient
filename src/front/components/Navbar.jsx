@@ -84,4 +84,4 @@ return (
       {sidebar && <div className="overlay" onClick={showSideBar}></div>}
     </>
   );
-};
+};   

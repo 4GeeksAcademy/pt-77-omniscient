@@ -1,7 +1,4 @@
-import React from "react";
-import useGlobalReducer from "../hooks/useGlobalReducer.jsx";
 import projectimage1 from "../assets/img/projectimage1.png";
-
 
 export const Checkout = () => {
   return (
@@ -18,7 +15,7 @@ export const Checkout = () => {
         padding: "2rem",
       }}
     >
-    <div
+      <div
         className="text-center"
         style={{ maxWidth: "700px", color: "#f8f9fa"  }}
       >
@@ -32,6 +29,7 @@ export const Checkout = () => {
         >
           🚧 Coming Soon: Game Sales & Checkout 🚀
         </h1>
+
         <img
           src="https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExeGd1aWZkaWswdzVhdHkzMDI3aTY0a2Y1MzNoNGN3djZ0bzU4cGE1dSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/UKwSxTQpFZoMrYxrYE/giphy.gif"
           alt="Coming Soon"

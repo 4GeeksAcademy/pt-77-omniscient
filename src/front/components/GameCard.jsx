@@ -73,7 +73,7 @@ export const GameCard = (props) => {
       className="card text bg-transparent mb-3 h-100 text-center"
       style={{
         minWidth: "18rem",
-        border: "2px solid black",
+        border: "2px solid blue",
         borderRadius: "1rem",
         background: "rgba(255, 255, 255, 0.1)",
         boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",

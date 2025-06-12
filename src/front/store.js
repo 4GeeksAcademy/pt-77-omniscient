@@ -1,6 +1,16 @@
 export const initialStore = () => {
   const access_token = localStorage.getItem("access_token");
-  const user = JSON.parse(localStorage.getItem("user"));
+  const userString = localStorage.getItem("user");
+
+  let user = null;
+  try {
+    if (userString) {
+      user = JSON.parse(userString);
+    }
+  } catch (err) {
+    console.error("Failed to parse user from localStorage:", err);
+    localStorage.removeItem("user");
+  }
 
   return {
     message: null,
@@ -12,6 +22,7 @@ export const initialStore = () => {
     gameReactions: {},
   };
 };
+
 
 export default function storeReducer(store, action = {}) {
   switch (action.type) {

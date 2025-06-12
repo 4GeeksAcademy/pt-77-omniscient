@@ -3,43 +3,44 @@ import { useParams } from "react-router-dom";
 import projectimage1 from "../assets/img/projectimage1.png";
 
 export const GameDetails = () => {
-    const { slug } = useParams();
-    const [game, setGame] = useState(null);
-    const [screenshots, setScreenshots] = useState([]);
-    const [loading, setLoading] = useState(true);
+  const { slug } = useParams();
+  const [game, setGame] = useState(null);
+  const [screenshots, setScreenshots] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-    useEffect(() => {
-        const fetchGameDetailsAndVideos = async () => {
-            try {
-                const res = await fetch(
-                    `https://api.rawg.io/api/games/${slug}?key=e09cf7c5817241ee825687b3373f921f`
-                );
-                const gameData = await res.json();
-                setGame(gameData);
-if (gameData.id) {
-    const screenshotsRes = await fetch(
-        `https://api.rawg.io/api/games/${gameData.id}/screenshots?key=e09cf7c5817241ee825687b3373f921f`
-    );
-    const screenshotsData = await screenshotsRes.json();
-    setScreenshots(screenshotsData.results || []);
-}
+  useEffect(() => {
+    const fetchGameDetailsAndVideos = async () => {
+      try {
+        // Fetch game details to get numeric ID
+        const res = await fetch(
+          `https://api.rawg.io/api/games/${slug}?key=e09cf7c5817241ee825687b3373f921f`
+        );
+        const gameData = await res.json();
+        setGame(gameData);
 
+        // Fetch screenshots using game ID
+        if (gameData.id) {
+          const screenshotsRes = await fetch(
+            `https://api.rawg.io/api/games/${gameData.id}/screenshots?key=e09cf7c5817241ee825687b3373f921f`
+          );
+          const screenshotsData = await screenshotsRes.json();
+          setScreenshots(screenshotsData.results || []);
+        }
+      } catch (error) {
+        console.error("Error fetching game details or videos:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-            } catch (error) {
-                console.error("Error fetching game details or videos:", error);
-            } finally {
-                setLoading(false);
-            }
-        };
+    fetchGameDetailsAndVideos();
+  }, [slug]);
 
-        fetchGameDetailsAndVideos();
-    }, [slug]);
+  if (loading) return <div>Loading...</div>;
+  if (!game) return <div>Game not found.</div>;
 
-    if (loading) return <div>Loading...</div>;
-    if (!game) return <div>Game not found.</div>;
-
-    return (
-       <div
+  return (
+    <div
       className="main"
       style={{
         backgroundImage: `url(${projectimage1})`,
@@ -71,17 +72,18 @@ if (gameData.id) {
         <div className="d-flex flex-column flex-md-row justify-content-between mb-4">
           <div>
             <span style={{ fontWeight: "bold", color: "#0ff" }}>Released:</span>{" "}
-            <span style={{ fontStyle: "italic", color: "#F8F8F8" }}>
+            <span style={{ fontStyle: "italic", color: "#f8f8f8" }}>
               {game.released}
             </span>
           </div>
           <div>
             <span style={{ fontWeight: "bold", color: "#ff0" }}>Rating:</span>{" "}
-            <span style={{ fontSize: "1.2rem", color: "#FEFEFE" }}>
+            <span style={{ fontSize: "1.2rem", color: "#fefefe" }}>
               {game.rating}
             </span>
           </div>
         </div>
+
         <h3
           className="mt-5"
           style={{ fontSize: "2rem", borderBottom: "1px solid #555" }}

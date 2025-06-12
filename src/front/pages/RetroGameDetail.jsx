@@ -12,12 +12,10 @@ export const RetroGameDetails = () => {
   if (!game) {
     return <p className="text-white text-center mt-5">Game not found</p>;
   }
-  console.log(game);
+
   const releaseDate = game.first_release_date
     ? new Date(game.first_release_date * 1000).toLocaleDateString()
     : "Unknown";
-
-  console.log("Full game object:", JSON.stringify(game, null, 2));
 
   const coverUrl = game.cover?.url
     ? game.cover.url.startsWith("http")
@@ -26,7 +24,7 @@ export const RetroGameDetails = () => {
     : null;
 
   return (
-   <div
+    <div
       className="text-center container-fluid"
       style={{
         backgroundImage: `url(${projectimage1})`,
@@ -52,7 +50,10 @@ export const RetroGameDetails = () => {
             }}
           />
         )}
+
         <p>{game.summary}</p>
+
+        {/* Release Date and Genres on the same line */}
         <div
           className="mt-4 mb-3"
           style={{
@@ -69,6 +70,7 @@ export const RetroGameDetails = () => {
             <strong style={{ color: "#0ff" }}>Release Date:</strong>{" "}
             <em>{releaseDate}</em>
           </div>
+
           {game.genres?.length > 0 && (
             <div>
               <strong style={{ color: "#f90" }}>Genres:</strong>{" "}
@@ -76,6 +78,7 @@ export const RetroGameDetails = () => {
             </div>
           )}
         </div>
+
         <div
           className="mb-4"
           style={{
@@ -94,6 +97,7 @@ export const RetroGameDetails = () => {
               {game.platforms.map((p) => p.name).join(", ")}
             </div>
           )}
+
           {game.involved_companies?.length > 0 && (
             <div>
               <strong style={{ color: "#0ff" }}>Developer:</strong>{" "}
@@ -101,15 +105,17 @@ export const RetroGameDetails = () => {
                 ?.name || "N/A"}
             </div>
           )}
+
           {game.rating && (
             <div>
               <strong style={{ color: "#ff0" }}>Rating:</strong>{" "}
-              <span style={{ fontSize: "1.2rem", color: "#FEFEFE" }}>
+              <span style={{ fontSize: "1.2rem", color: "#fefefe" }}>
                 {Math.round(game.rating)} / 100
               </span>
             </div>
           )}
         </div>
+
         {game.involved_companies?.length > 0 && (
           <p>
             <strong>Developer:</strong>{" "}
@@ -117,6 +123,7 @@ export const RetroGameDetails = () => {
               "N/A"}
           </p>
         )}
+
         <h3 className="mt-5">Screenshots</h3>
         {game.screenshots?.length > 0 ? (
           <div

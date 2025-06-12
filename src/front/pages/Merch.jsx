@@ -72,18 +72,32 @@ export const Merch = () => {
         width: "100vw",
       }}
     >
-      <div className="container py-5" style={{ backgroundColor: "transparent" }}>
-        <h1 className="display-4 fw-bold text-white text-center mb-5">Gameplay Showcase</h1>
+      <div className="container py-5 text-white">
+        <div className="text-center mb-5">
+          <h1
+            className="display-4 fw-bold d-inline-block bg-dark bg-opacity-50 p-3 rounded"
+          >
+            🎮 Gameplay Showcase
+          </h1>
+        </div>
+
+        {/* Vintage Videos */}
         <section className="mb-5">
-          <h2 className="h4 fw-semibold text-white mb-4">Vintage Gameplays</h2>
+          <h2 className="h4 fw-semibold mb-4">
+            <span className="bg-dark bg-opacity-50 px-3 py-1 rounded d-inline-block">
+              🕹️ Vintage Gameplays
+            </span>
+          </h2>
           {vintageVideos.length === 0 ? (
-            <p className="text-center text-muted">No vintage videos found.</p>
+            <p className="text-center text-light bg-dark bg-opacity-50 p-2 rounded">
+              No vintage videos found.
+            </p>
           ) : (
             <div className="row g-4">
               {vintageVideos.map((video, index) => (
                 <div key={index} className="col-12 col-md-6 col-lg-4">
-                  <div className="p-3 shadow rounded" style={{ backgroundColor: "rgba(255, 255, 255, 0.1)" }}>
-                    <h5 className="mb-2 text-white">{video.name}</h5>
+                  <div className="p-3 bg-dark bg-opacity-50 shadow rounded text-white">
+                    <h5 className="mb-2">{video.name}</h5>
                     <div className="ratio ratio-16x9">
                       <iframe
                         src={`https://www.youtube.com/embed/${video.youtubeId}`}
@@ -97,18 +111,25 @@ export const Merch = () => {
             </div>
           )}
         </section>
+
         {/* Modern Videos */}
         <section>
-          <h2 className="h4 fw-semibold text-white mb-4">Modern Game Trailers</h2>
+          <h2 className="h4 fw-semibold mb-4">
+            <span className="bg-dark bg-opacity-50 px-3 py-1 rounded d-inline-block">
+              🧩 Modern Game Trailers (RAWG)
+            </span>
+          </h2>
           {modernVideos.length === 0 ? (
-            <p className="text-center text-muted">No modern videos found.</p>
+            <p className="text-center text-light bg-dark bg-opacity-50 p-2 rounded">
+              No modern videos found.
+            </p>
           ) : (
             <>
               <div className="row g-4 mb-4">
                 {modernVideos.map((video, index) => (
                   <div key={index} className="col-12 col-md-6 col-lg-4">
-                   <div className="p-3 shadow rounded" style={{ backgroundColor: "rgba(255, 255, 255, 0.1)" }}>
-                      <h5 className="mb-2 text-white">{video.name}</h5>
+                    <div className="p-3 bg-dark bg-opacity-50 shadow rounded text-white">
+                      <h5 className="mb-2">{video.name}</h5>
                       <div className="ratio ratio-16x9">
                         <video controls className="w-100 h-100 rounded" preload="metadata">
                           <source src={video.video} type="video/mp4" />
@@ -123,7 +144,7 @@ export const Merch = () => {
                 <button
                   onClick={loadMoreModernTrailers}
                   disabled={loadingMoreModern}
-                  className="btn btn-primary"
+                  className="btn btn-light btn-lg"
                 >
                   {loadingMoreModern ? "Loading..." : "Load More Trailers"}
                 </button>
