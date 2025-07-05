@@ -9,14 +9,18 @@ import { Layout } from "./pages/Layout";
 import { Home } from "./pages/Home";
 import { Single } from "./pages/Single";
 import { Demo } from "./pages/Demo";
-
 import { Games } from "./pages/Games";
 import { RetroGames } from "./pages/Retrogames";
 import { Merch } from "./pages/Merch";
 import { Checkout } from "./pages/Checkout";
 import { Login } from "./pages/Login";
 import { Signup } from "./pages/Signup";
-import { Private } from "./pages/private";
+import { GameDetails } from "./pages/GamesDetail";
+import { Profile } from "./pages/Profile";
+import { MustLogin } from "./pages/MustLogin";
+import { RetroGameDetails } from "./pages/RetroGameDetail";
+
+
 
 export const router = createBrowserRouter(
   createRoutesFromElements(
@@ -38,7 +42,10 @@ export const router = createBrowserRouter(
         <Route path="/checkout" element={<Checkout />} />
         <Route path="/login/" element={<Login />} />
         <Route path="/signup/" element={<Signup />} />
-        <Route path="/profile/:theId" element={<Private />} />
+        <Route path="/game/:slug" element={<GameDetails />} />
+        <Route path="/retrogame/:uid" element={<RetroGameDetails />} />
+        <Route path="/profile/:theId" element={<Profile />} />
+        <Route path="/must-login" element={<MustLogin />} />
       </Route>
     )
 );

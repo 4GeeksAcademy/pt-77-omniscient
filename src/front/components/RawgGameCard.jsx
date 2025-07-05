@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from "react";
 import useGlobalReducer from "../hooks/useGlobalReducer.jsx";
 import { Link } from "react-router-dom";
 
-export const GameCard = (props) => {
+export const RawgGameCard = (props) => {
   const { store, dispatch, saveGameForLater } = useGlobalReducer();
   const [ isSaving, setIsSaving ] = useState(false)
   const [ saveMessage, setSaveMessage ] = useState("")
@@ -19,7 +19,7 @@ export const GameCard = (props) => {
   const [dislikes, setDislikes] = useState(() => {
     return Number(localStorage.getItem(dislikesKey)) || 0;
   });
-
+ 
   // Whenever likes change, save to localStorage
   useEffect(() => {
     localStorage.setItem(likesKey, likes);
@@ -30,8 +30,9 @@ export const GameCard = (props) => {
     localStorage.setItem(dislikesKey, dislikes);
   }, [dislikes, dislikesKey]);
 
+
   const handleSaveForLater = async () => {
-    console.log("Saving for later:", props.name);
+    // console.log("Saving for later:", props.name);
     setIsSaving(true);
     setSaveMessage('');
     // Prepare game data for the backend
@@ -70,9 +71,9 @@ export const GameCard = (props) => {
       setTimeout(() => setSaveMessage(''), 2000);
     }
   };
-  const isGameSaved = store.save_for_later?.some(
-    savedGame => savedGame.uid===props.uid || savedGame.name===props.name
-  )
+ const isGameSaved = store.save_for_later?.some(
+      savedGame => savedGame.uid===props.uid || savedGame.name===props.name
+    )
 
   return (
     <div
@@ -90,36 +91,36 @@ export const GameCard = (props) => {
     >
       <div className="card-body">
         <Link
-          to={`/retrogame/${props.uid}`}
+          to={`/game/${props.slug}`}
           style={{ textDecoration: "none", color: "inherit" }}
         >
           <img
-            src={`https:${props.img.replace("t_thumb", "t_cover_big")}`}
+            src={props.img}
             className="card-img-top"
             alt="gameImage"
             style={{
-              maxHeight: "300px",
+              height: "300px",
               objectFit: "contain",
               imageRendering: "auto",
               borderRadius: ".5rem",
             }}
           />
         </Link>
-        <h4 className="card-title mt-2">{props.name}</h4>
-
-        <div className="d-flex justify-content-center gap-2 mt-2">
-          <button
-            className="btn btn-outline-success"
-            onClick={() => setLikes((prev) => prev + 1)}
-          >
-            👍 {likes}
-          </button>
-          <button
-            className="btn btn-outline-danger"
-            onClick={() => setDislikes((prev) => prev + 1)}
-          >
-            👎 {dislikes}
-          </button>
+        <h2 className="card-title">{props.name}</h2>
+      </div>
+      <div className="d-flex justify-content-center gap-2 mt-2">
+        <button
+          className="btn btn-outline-success"
+          onClick={() => setLikes((prev) => prev + 1)}
+        >
+          👍 {likes}
+        </button>
+        <button
+          className="btn btn-outline-danger"
+          onClick={() => setDislikes((prev) => prev + 1)}
+        >
+          👎 {dislikes}
+        </button>
          <button
             className={`btn ${isGameSaved ? 'btn-success' : 'btn-primary'}`}
             onClick={handleSaveForLater}
@@ -129,7 +130,6 @@ export const GameCard = (props) => {
             <i className={`fa-solid ${isGameSaved ? 'fa-check' : 'fa-bookmark'} me-1`}></i>
             {isSaving ? 'Saving...' : isGameSaved ? 'Saved' : 'Save'}
           </button>
-        </div>
       </div>
     </div>
   );
